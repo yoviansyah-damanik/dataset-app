@@ -11,7 +11,7 @@
         180deg,
         rgba(255, 255, 255, 0.15),
         rgba(255, 255, 255, 0)
-    );--bs-body-font-family:var(--custom-font);--bs-body-font-size:1rem;--bs-body-font-weight:400;--bs-body-line-height:1.5;--bs-body-color:#212529;--bs-body-bg:#fff;--custom-font:"IBM Plex Sans",sans-serif,system-ui,-apple-system;--primary-color:#ffff00;--primary-hover-color:#ffff0090;--primary-border-color:#f3f300;--secondary-color:#ffd900;--secondary-hover-color:#ffd90025;--primary-link-color:#ffd900;--body-color:#0d0f0b;--primary-dark:rgb(58, 58, 0);--topbar-color:#011635;--topbar-secondary-color:#002a69;--sidenav-user-color:linear-gradient(
+    );--bs-body-font-family:var(--custom-font);--bs-body-font-size:1rem;--bs-body-font-weight:400;--bs-body-line-height:1.5;--bs-body-color:#212529;--bs-body-bg:#fff;--custom-font:"IBM Plex Sans",sans-serif,system-ui,-apple-system;--primary-color:#ffff00;--primary-hover-color:#ffff0090;--primary-border-color:#f3f300;--secondary-color:#ffd900;--secondary-hover-color:#ffd90025;--secondary-login-background-color:#ffd90080;--primary-link-color:#ffd900;--body-color:#0d0f0b;--primary-dark:rgb(58, 58, 0);--topbar-color:#011635;--topbar-secondary-color:#002a69;--topbar-login-background-color:#01163580;--sidenav-user-color:linear-gradient(
         45deg,
         var(--topbar-secondary-color) 0%,
         var(--topbar-color) 100%

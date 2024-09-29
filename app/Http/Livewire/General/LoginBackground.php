@@ -7,11 +7,12 @@ use App\Models\Configuration;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginBackground extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, LivewireAlert;
 
     public $login_background;
 
