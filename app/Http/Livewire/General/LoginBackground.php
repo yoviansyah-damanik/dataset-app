@@ -52,7 +52,6 @@ class LoginBackground extends Component
         $this->reset();
         Artisan::call('cache:clear');
 
-        Alert::success('Sukses!', 'Berhasil memperbaharui login background.');
-        return to_route('configuration');
+        $this->alert('success', 'Berhasil memperbaharui login background.');
     }
 }
