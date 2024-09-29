@@ -1,0 +1,191 @@
+@push('scripts')
+    <script type="text/javascript">
+        const setVillageSelect = (data) => {
+            if (data) {
+                $('#village_id').empty()
+                $('#village_id').select2({
+                    placeholder: "Pilih Kelurahan/Desa",
+                    theme: "bootstrap-5",
+                    data: data,
+                    language: "id",
+                });
+            } else {
+                if (!@this.get('kelurahan')) {
+                    $('#village_id').val('')
+                }
+                $('#village_id').select2({
+                    placeholder: "Pilih Kelurahan/Desa",
+                    theme: "bootstrap-5",
+                    language: "id",
+                });
+            }
+
+            $('#village_id').on('change', function(e) {
+                var data = $('#village_id').select2("val");
+                @this.set('kelurahan', data);
+            });
+        }
+
+        const setTpsSelect = (data) => {
+            if (data) {
+                $('#tps_id').empty()
+                $('#tps_id').select2({
+                    placeholder: "Pilih TPS",
+                    theme: "bootstrap-5",
+                    data: data,
+                    language: "id",
+                });
+            } else {
+                if (!@this.get('tps')) {
+                    $('#tps_id').val('')
+                }
+                $('#tps_id').select2({
+                    placeholder: "Pilih TPS",
+                    theme: "bootstrap-5",
+                    language: "id",
+                });
+            }
+
+            $('#tps_id').on('change', function(e) {
+                var data = $('#tps_id').select2("val");
+                @this.set('tps', data);
+            });
+        }
+
+        const resetDistrict = (isEmpty) => {
+            if (isEmpty)
+                $('#district_id').val('')
+
+            $('#district_id').select2({
+                placeholder: "Pilih Kecamatan",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+        }
+
+        const resetVillage = () => {
+            $('#village_id').val('')
+            $('#village_id').select2({
+                placeholder: "Pilih Kelurahan/Desa",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+        }
+
+        const resetTps = () => {
+            $('#tps_id').val('')
+            $('#tps_id').select2({
+                placeholder: "Pilih TPS",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+        }
+
+        $(window).on('resetDistrict', (data) => {
+            resetDistrict()
+        })
+
+        $(window).on('setVillageData', (data) => {
+            setVillageSelect(data.detail)
+        })
+
+        $(window).on('setTpsData', (data) => {
+            setTpsSelect(data.detail)
+        })
+
+        $(document).ready(function() {
+            resetDistrict(false)
+            setAdditionalInput(false)
+            setRegionInput()
+        })
+
+        function setAdditionalInput(isEmpty) {
+            if (isEmpty) {
+                $('#religion_id').val('')
+                $('#marital_status_id').val('')
+                $('#profession_id').val('')
+                $('#nasionality_id').val('')
+            }
+
+            $('#religion_id').select2({
+                placeholder: "Pilih Agama",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+            $('#religion_id').on('change', function(e) {
+                let religion_id = $('#religion_id').select2("val");
+                $('#religion_id').removeClass('is-invalid');
+                @this.set('agama', religion_id);
+            });
+
+            $('#marital_status_id').select2({
+                placeholder: "Pilih Status Perkawinan",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+            $('#marital_status_id').on('change', function(e) {
+                let marital_status_id = $('#marital_status_id').select2("val");
+                $('#marital_status_id').removeClass('is-invalid');
+                @this.set('status_perkawinan', marital_status_id);
+            });
+
+            $('#profession_id').select2({
+                placeholder: "Pilih Pekerjaan",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+            $('#profession_id').on('change', function(e) {
+                let profession_id = $('#profession_id').select2("val");
+                $('#profession_id').removeClass('is-invalid');
+                @this.set('pekerjaan', profession_id);
+            });
+
+            $('#nasionality_id').select2({
+                placeholder: "Pilih Kewarganegaraan",
+                theme: "bootstrap-5",
+                language: "id",
+            });
+            $('#nasionality_id').on('change', function(e) {
+                let nasionality_id = $('#nasionality_id').select2("val");
+                $('#nasionality_id').removeClass('is-invalid');
+                @this.set('kewarganegaraan', nasionality_id);
+            });
+        }
+
+        function setRegionInput() {
+            $('#district_id').on('change', function(e) {
+                let district_id = $('#district_id').select2("val");
+                $('#district_id').removeClass('is-invalid');
+                $('#village_id').removeClass('is-invalid');
+                $('#tps_id').removeClass('is-invalid');
+                @this.set('kecamatan', district_id);
+                @this.call('set_villages')
+                @this.call('set_tpses')
+            });
+            setVillageSelect()
+
+            $('#village_id').on('change', function(e) {
+                let village_id = $('#village_id').select2("val");
+                $('#village_id').removeClass('is-invalid');
+                $('#tps_id').removeClass('is-invalid');
+                @this.set('kelurahan', village_id);
+                @this.call('set_tpses')
+            });
+            setTpsSelect()
+
+            $('#tps_id').on('change', function(e) {
+                let tps_id = $('#tps_id').select2("val");
+                $('#tps_id').removeClass('is-invalid');
+                @this.set('tps', tps_id);
+            });
+        }
+        $(window).on('reloadDistrict', function(e) {
+            resetDistrict(e.detail.is_empty)
+            setRegionInput()
+        })
+
+        $(window).on('reloadAdditionalInput', function(e) {
+            setAdditionalInput(e.detail.is_empty)
+        })
+    </script>
+@endpush
