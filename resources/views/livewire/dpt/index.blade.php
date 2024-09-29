@@ -56,6 +56,7 @@
                     <th>TPS</th>
                     <th>Kelurahan</th>
                     <th>Kecamatan</th>
+                    <th>Data Pemilih</th>
                 </thead>
                 <tbody>
                     @forelse ($dpts as $dpt)
@@ -80,6 +81,15 @@
                             </td>
                             <td>
                                 {{ $dpt->district }}
+                            </td>
+                            <td class="text-center">
+                                @if ($dpt->voter)
+                                    <a href="{{ route('voters.show', $dpt->voter->id) }}">
+                                        <span class="fas fa-check text-success"></span>
+                                    </a>
+                                @else
+                                    <span class="fas fa-times text-danger"></span>
+                                @endif
                             </td>
                         </tr>
                     @empty

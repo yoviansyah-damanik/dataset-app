@@ -89,7 +89,7 @@
                         {{ GeneralHelper::number_format($village->voters_total) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format(($village->voters_count / $village->voters_total) * 100, true) }}
+                        {{ GeneralHelper::number_format($village->voters_total > 0 ? ($village->voters_count / $village->voters_total) * 100 : 0, true) }}
                     </td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-info text-white position-relative" style="cursor:pointer;"
