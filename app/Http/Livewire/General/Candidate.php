@@ -2,12 +2,11 @@
 
 namespace App\Http\Livewire\General;
 
+use App\Helpers\GeneralHelper;
 use Livewire\Component;
 use App\Models\Configuration;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use RealRashid\SweetAlert\Facades\Alert;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Candidate extends Component
@@ -22,22 +21,9 @@ class Candidate extends Component
 
     public function mount()
     {
-        $configs = Configuration::whereIn('attribute', [
-            'candidate_1_name',
-            // 'candidate_1_picture',
-            'candidate_2_name',
-            // 'candidate_2_picture',
-            'candidate_callsign',
-        ])
-            ->get()->pluck('value', 'attribute')->toArray();
-
-        extract($configs);
-
-        $this->candidate_1_name = $candidate_1_name;
-        // $this->candidate_1_picture = $candidate_1_picture;
-        $this->candidate_2_name = $candidate_2_name;
-        // $this->candidate_2_picture = $candidate_2_picture;
-        $this->candidate_callsign = $candidate_callsign;
+        $this->candidate_1_name = GeneralHelper::get_candidate_1_name();
+        $this->candidate_2_name = GeneralHelper::get_candidate_2_name();
+        $this->candidate_callsign = GeneralHelper::get_candidate_callsign();
     }
 
     public function render()
@@ -77,7 +63,7 @@ class Candidate extends Component
 
         try {
             if ($this->candidate_1_picture) {
-                $candidate_1_picture_filename = 'storage/' . $this->candidate_1_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_1.' . $this->candidate_1_picture->getClientOriginalExtension(), 'public');
+                $candidate_1_picture_filename = $this->candidate_1_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_1.' . $this->candidate_1_picture->getClientOriginalExtension(), 'public');
 
                 $candidate_1_picture = Configuration::where('attribute', 'candidate_1_picture');
                 Storage::delete("public/" . $candidate_1_picture->first()->value);
@@ -103,7 +89,7 @@ class Candidate extends Component
 
         try {
             if ($this->candidate_2_picture) {
-                $candidate_2_picture_filename = 'storage/' . $this->candidate_2_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_2.' . $this->candidate_2_picture->getClientOriginalExtension(), 'public');
+                $candidate_2_picture_filename = $this->candidate_2_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_2.' . $this->candidate_2_picture->getClientOriginalExtension(), 'public');
 
                 $candidate_2_picture = Configuration::where('attribute', 'candidate_2_picture');
                 Storage::delete("public/" . $candidate_2_picture->first()->value);

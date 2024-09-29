@@ -56,7 +56,7 @@ class GeneralHelper
         if (!$logo || !Storage::disk('public')->exists($logo))
             return asset('logo_default.png');
 
-        return asset($logo);
+        return asset('storage/' . $logo);
     }
 
     public static function get_candidate_callsign()
@@ -84,7 +84,7 @@ class GeneralHelper
         if (!$candidate || !Storage::disk('public')->exists($candidate))
             return asset('candidate.png');
 
-        return asset($candidate);
+        return asset('storage/' . $candidate);
     }
 
     public static function get_candidate_2_picture()
@@ -94,7 +94,7 @@ class GeneralHelper
         if (!$candidate || !Storage::disk('public')->exists($candidate))
             return asset('candidate.png');
 
-        return asset($candidate);
+        return asset('storage/' . $candidate);
     }
 
     public static function get_favicon()
@@ -104,7 +104,7 @@ class GeneralHelper
         if (!$favicon || !Storage::disk('public')->exists($favicon))
             return asset('favicon_default.png');
 
-        return asset($favicon);
+        return asset('storage/' . $favicon);
     }
 
     public static function get_ads()
@@ -114,7 +114,7 @@ class GeneralHelper
         if (!$ads || !Storage::disk('public')->exists($ads))
             return asset('ads_default.png');
 
-        return asset($ads);
+        return asset('storage/' . $ads);
     }
 
     public static function get_login_background()
@@ -124,7 +124,7 @@ class GeneralHelper
         if (!$login_background || !Storage::disk('public')->exists($login_background))
             return asset('login_background_default.jpg');
 
-        return asset($login_background);
+        return asset('storage/' . $login_background);
     }
 
     public static function get_age($date, $withMonth = false, $withDay = false)
