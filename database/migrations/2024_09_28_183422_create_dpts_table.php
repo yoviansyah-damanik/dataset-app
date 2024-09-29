@@ -22,6 +22,18 @@ return new class extends Migration
             $table->string('tps');
             $table->string('village');
             $table->string('district');
+            //     $table->foreignId('district_id')
+            //     ->reference('id')
+            //     ->on('districts')
+            //     ->index();
+            // $table->foreignId('village_id')
+            //     ->reference('id')
+            //     ->on('villages')
+            //     ->index();
+            // $table->foreignId('tps_id')
+            //     ->reference('id')
+            //     ->on('tps')
+            //     ->index();
         });
     }
 

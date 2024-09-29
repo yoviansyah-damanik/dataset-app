@@ -33,32 +33,38 @@ class Datalist extends Component
 
         $tpses = DB::table('tps', 't')
             ->selectRaw(
-                't.id, t.name, t.voters_total, d.id as district_id, d.name as district_name, vl.id as village_id, vl.name as village_name, '
+                't.id, t.name, t.voters_total, (select count(dpts.id) from dpts where dpts.tps_id = t.id) as dpts_count, d.id as district_id, d.name as district_name, vl.id as village_id, vl.name as village_name, '
                     . '(select count(v.id) from voters v where '
                     . 'v.tps_id = t.id) as voters_count'
             )
             ->join('villages as vl', 'vl.id', '=', 't.village_id')
             ->join('districts as d', 'vl.district_id', '=', 'd.id')
             ->where('t.name', 'like', "%$this->s%")
+            ->where('dpts_count', '!=', 'voters_total')
             ->when(
                 $this->district,
                 fn($q) =>
                 $q->where('district_id', $this->district)
                     ->when($this->village, fn($q) => $q->where('village_id', $this->village))
-            );
+            )
+            ->get();
 
-        $get_data = $tpses->get();
-        $tpses_voters_count = $get_data->sum('voters_count');
-        $tpses_voters_total = $get_data->sum('voters_total');
+        // $tpses = Tps::with('district', 'village')
+        //     ->withCount('voters', 'dpts')
+        //     ->where('voters_count', '!=', 'dpts_count');
 
-        $tpses = $tpses->paginate($this->limit, ['*'], 'tpsPage');
+        // $get_data = $tpses->get();
+        // $tpses_voters_count = $tpses->sum('voters_count');
+        // $tpses_voters_total = $tpses->sum('dpts_total');
+
+        // $tpses = $tpses->paginate($this->limit, ['*'], 'tpsPage');
 
         return view('livewire.region.tps.datalist', compact(
             'tpses',
             'districts',
             'villages',
-            'tpses_voters_count',
-            'tpses_voters_total',
+            // 'tpses_voters_count',
+            // 'tpses_voters_total',
         ));
     }
 

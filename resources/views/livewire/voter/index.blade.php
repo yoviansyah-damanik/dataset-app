@@ -6,11 +6,6 @@
         </div>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="/">
-                    Beranda
-                </a>
-            </li>
-            <li class="breadcrumb-item">
                 <a href="{{ route('dashboard') }}">
                     Dashboard
                 </a>

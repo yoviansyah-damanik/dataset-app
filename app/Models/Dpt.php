@@ -17,8 +17,24 @@ class Dpt extends Model
     {
         return new Attribute(get: fn() => $this->gender == 'L' ? 'Laki-laki' : 'Perempuan');
     }
+
     public function voter(): HasOne
     {
         return $this->hasOne(Voter::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function village()
+    {
+        return $this->belongsTo(Village::class);
+    }
+
+    public function tps()
+    {
+        return $this->belongsTo(Tps::class);
     }
 }

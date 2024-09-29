@@ -16,7 +16,7 @@ class LoginBackground extends Component
     public $login_background;
 
     protected $rules = [
-        'login_background' => 'required|image|max:1024|mimes:jpg,jpeg,png,gif,svg,bmp',
+        'login_background' => 'required|image|max:1024|mimes:jpg,jpeg,png,gif,svg,bmp,webp',
     ];
 
     public function render()
