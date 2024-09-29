@@ -24,9 +24,9 @@ class Candidate extends Component
     {
         $configs = Configuration::whereIn('attribute', [
             'candidate_1_name',
-            // 'candidate_1_picture',
+            'candidate_1_picture',
             'candidate_2_name',
-            // 'candidate_2_picture',
+            'candidate_2_picture',
             'candidate_callsign',
         ])
             ->get()->pluck('value', 'attribute')->toArray();
