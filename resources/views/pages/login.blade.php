@@ -13,7 +13,7 @@
     <title>{{ GeneralHelper::get_abb_app_name() . ' | ' . GeneralHelper::get_unit_name() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ GeneralHelper::get_favicon() }}">
     <link rel="stylesheet" href="{{ asset('css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.min.css') }}">
 </head>
 
 <body class="login-background" style="background-image: url('{{ GeneralHelper::get_login_background() }}')">
