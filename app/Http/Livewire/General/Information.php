@@ -5,10 +5,12 @@ namespace App\Http\Livewire\General;
 use Livewire\Component;
 use App\Models\Configuration;
 use App\Helpers\GeneralHelper;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class Information extends Component
 {
+    use LivewireAlert;
     public $app_name, $app_name_abb, $unit_name;
 
     public function mount()
@@ -49,14 +51,19 @@ class Information extends Component
     public function update()
     {
         $this->validate();
+        try {
+            Configuration::where('attribute', 'app_name')
+                ->update(['value' => $this->app_name]);
+            Configuration::where('attribute', 'app_name_abb')
+                ->update(['value' => $this->app_name_abb]);
+            Configuration::where('attribute', 'unit_name')
+                ->update(['value' => $this->unit_name]);
 
-        Configuration::where('attribute', 'app_name')
-            ->update(['value' => $this->app_name]);
-        Configuration::where('attribute', 'app_name_abb')
-            ->update(['value' => $this->app_name_abb]);
-        Configuration::where('attribute', 'unit_name')
-            ->update(['value' => $this->unit_name]);
-
-        $this->alert('success', 'Berhasil memperbaharui informasi sistem.');
+            $this->alert('success', 'Berhasil memperbaharui informasi sistem.');
+        } catch (\Exception $e) {
+            $this->alert('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->alert('error', $e->getMessage());
+        }
     }
 }
