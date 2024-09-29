@@ -72,13 +72,12 @@ class Candidate extends Component
 
     public function update_1()
     {
-        $this->validate();
         $this->validateOnly('candidate_1_picture');
         $this->validateOnly('candidate_1_name');
 
         try {
             if ($this->candidate_1_picture) {
-                $candidate_1_picture_filename = $this->candidate_1_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_1.' . $this->candidate_1_picture->getClientOriginalExtension(), 'public');
+                $candidate_1_picture_filename = 'storage/' . $this->candidate_1_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_1.' . $this->candidate_1_picture->getClientOriginalExtension(), 'public');
 
                 $candidate_1_picture = Configuration::where('attribute', 'candidate_1_picture');
                 Storage::delete("public/" . $candidate_1_picture->first()->value);
@@ -99,13 +98,12 @@ class Candidate extends Component
 
     public function update_2()
     {
-        $this->validate();
         $this->validateOnly('candidate_2_picture');
         $this->validateOnly('candidate_2_name');
 
         try {
             if ($this->candidate_2_picture) {
-                $candidate_2_picture_filename = $this->candidate_2_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_2.' . $this->candidate_2_picture->getClientOriginalExtension(), 'public');
+                $candidate_2_picture_filename = 'storage/' . $this->candidate_2_picture->storeAs('configuration', date('ymdHis') . '_CANDIDATE_2.' . $this->candidate_2_picture->getClientOriginalExtension(), 'public');
 
                 $candidate_2_picture = Configuration::where('attribute', 'candidate_2_picture');
                 Storage::delete("public/" . $candidate_2_picture->first()->value);
