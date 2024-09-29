@@ -146,7 +146,7 @@
                 {{ GeneralHelper::number_format($villages_voters_total) }}
             </th>
             <th>
-                {{ GeneralHelper::number_format(($villages_voters_count / $villages_voters_total) * 100, true) }}
+                {{ GeneralHelper::number_format($villages_voters_total > 0 ? ($villages_voters_count / $villages_voters_total) * 100 : 0, true) }}
             </th>
         </tfoot>
     </table>
