@@ -69,13 +69,13 @@
                                 {{ $dpt->address }}, RT: {{ $dpt->rt }}, RW: {{ $dpt->rw }}
                             </td>
                             <td>
-                                {{ $dpt->tps }}
+                                {{ $dpt->tps->name }}
                             </td>
                             <td>
-                                {{ $dpt->village }}
+                                {{ $dpt->village->name }}
                             </td>
                             <td>
-                                {{ $dpt->district }}
+                                {{ $dpt->district->name }}
                             </td>
                             <td class="text-center">
                                 @if ($dpt->voter)

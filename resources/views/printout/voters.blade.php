@@ -181,6 +181,29 @@
                                 {{ $team[0]['team_name'] }}
                             </td>
                         </tr>
+                        <tr>
+                            <td style="width: 150px">
+                                <span class="fw-bold">Koordinator Kecamatan</span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">:</span>
+                                {{ $created_at }}
+                            </td>
+                            <td style="width: 150px">
+                                <span class="fw-bold">Koordinator Kelurahan/Desa</span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">:</span>
+                                {{ $village['name'] }}
+                            </td>
+                            <td style="width: 150px">
+                                <span class="fw-bold">Koordinator TPS</span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">:</span>
+                                {{ $team[0]['team_name'] }}
+                            </td>
+                        </tr>
                     </table>
 
                     <table class="bordered mt-3" cellpadding=1>

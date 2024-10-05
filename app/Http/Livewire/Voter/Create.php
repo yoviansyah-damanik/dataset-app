@@ -77,7 +77,7 @@ class Create extends Component
             $this->reset('districts', 'villages', 'tpses');
 
         if ($this->step == 1) {
-            $this->data = Dpt::where('name', 'like', '%' . $this->search . '%')
+            $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', '%' . $this->search . '%')
                 ->whereDoesntHave('voter')
                 ->limit(10)
                 ->get();
@@ -315,6 +315,9 @@ class Create extends Component
             $new_voter->phone_number = $this->no_telp ?? null;
             $new_voter->nasionality_id = $this->kewarganegaraan;
             $new_voter->user_id = auth()->user()->id;
+            $new_voter->district_coor_id = $this->district_coor->id;
+            $new_voter->village_coor_id = $this->village_coor->id;
+            $new_voter->tps_coor_id = $this->tps_coor->id;
             $new_voter->team_id = $this->team->id;
             $new_voter->dpt_id = $this->dpt->id;
             $new_voter->save();

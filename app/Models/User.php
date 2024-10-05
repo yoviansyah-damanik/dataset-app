@@ -54,7 +54,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'fullname',
         'email',
         'password',
         'district_id',
@@ -99,7 +100,7 @@ class User extends Authenticatable
             case "Administrator":
                 return Voter::where('district_id', $this->district_id)
                     ->count();
-            case "Koordinator Keluarga":
+            case "Administrator Keluarga":
                 return Voter::where('family_coor_id', auth()->user()->id)
                     ->count();
             case "Koordinator Kecamatan":

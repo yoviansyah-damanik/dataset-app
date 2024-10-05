@@ -101,6 +101,19 @@ class Voter extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function district_coor()
+    {
+        return $this->belongsTo(User::class, 'district_coor_id', 'id');
+    }
+    public function village_coor()
+    {
+        return $this->belongsTo(User::class, 'village_coor_id', 'id');
+    }
+    public function tps_coor()
+    {
+        return $this->belongsTo(User::class, 'tps_coor_id', 'id');
+    }
+
     public function team_by()
     {
         return $this->belongsTo(User::class, 'team_id', 'id');

@@ -138,17 +138,17 @@
                     </tr>
                     <tr>
                         <th>TPS</th>
-                        <td>TPS {{ $voter->dpt->tps }}
+                        <td>TPS {{ $voter->dpt->tps->name }}
                         </td>
                     </tr>
                     <tr>
                         <th>Kelurahan/Desa</th>
-                        <td>{{ $voter->dpt->village }}
+                        <td>{{ $voter->dpt->village->name }}
                         </td>
                     </tr>
                     <tr>
                         <th>Kecamatan</th>
-                        <td>{{ $voter->dpt->district }}
+                        <td>{{ $voter->dpt->district->name }}
                         </td>
                     </tr>
                     <tr>
@@ -178,17 +178,17 @@
                     </tr>
                     <tr>
                         <th>Koordinator Kecamatan</th>
-                        <td>{{ $voter->district->coordinators->count() ? $voter->district->coordinators->pluck('fullname')->join(', ') : '-' }}
+                        <td>{{ $voter->district_coor->fullname }}
                         </td>
                     </tr>
                     <tr>
                         <th>Koordinator Kelurahan/Desa</th>
-                        <td>{{ $voter->village->coordinators->count() ? $voter->village->coordinators->pluck('fullname')->join(', ') : '-' }}
+                        <td>{{ $voter->village_coor->fullname }}
                         </td>
                     </tr>
                     <tr>
                         <th>Koordinator TPS</th>
-                        <td>{{ $voter->tps->coordinators->count() ? $voter->tps->coordinators->pluck('fullname')->join(', ') : '-' }}
+                        <td>{{ $voter->tps_coor->fullname }}
                         </td>
                     </tr>
                     <tr>

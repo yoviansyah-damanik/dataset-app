@@ -137,7 +137,7 @@
                         DPT
                     </div>
                     <div style="flex: 1 1 0%">
-                        {{ $dpt ? $dpt->name . ' - ' . $dpt->age . ' Tahun - ' . $dpt->genderFull . ' - TPS ' . $dpt->tps . ' - ' . $dpt->village . ' - ' . $dpt->district : '-' }}
+                        {{ $dpt ? $dpt->name . ' - ' . $dpt->age . ' Tahun - ' . $dpt->genderFull . ' - ' . $dpt->tps->name . ' - ' . $dpt->village->name . ' - ' . $dpt->district->name : '-' }}
                     </div>
                 </div>
                 <div class="d-flex gap-1">
@@ -243,7 +243,7 @@
                                             TPS
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            TPS {{ $item->tps }}
+                                            {{ $item->tps->name }}
                                         </div>
                                     </div>
                                     <div class="d-flex gap-1">
@@ -251,7 +251,7 @@
                                             Kelurahan/Desa
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $item->village }}
+                                            {{ $item->village->name }}
                                         </div>
                                     </div>
                                     <div class="d-flex gap-1">
@@ -259,7 +259,7 @@
                                             Kecamatan
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $item->district }}
+                                            {{ $item->district->name }}
                                         </div>
                                     </div>
                                 </td>

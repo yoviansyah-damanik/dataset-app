@@ -16,7 +16,7 @@ class Index extends Component
 
     public function render()
     {
-        $dpts = Dpt::with('voter')
+        $dpts = Dpt::with('voter', 'district', 'village', 'tps')
             ->where('name', 'like', '%' . $this->search . '%')
             ->paginate($this->per_page);
 
