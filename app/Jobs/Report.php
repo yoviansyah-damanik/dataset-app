@@ -233,7 +233,7 @@ class Report implements ShouldQueue
                                 'id' => $village->id,
                                 'name' => $village->name,
                                 'tpses' => Tps::select('id', 'name')
-                                    ->with('voters', 'voters.team_by')
+                                    ->with('voters', 'voters.team_by', 'voters.district_coor', 'voters.village_coor', 'voters.tps_coor')
                                     ->where('village_id', $village->id)
                                     ->get()
                                     ->map(function ($tps) {
@@ -246,13 +246,20 @@ class Report implements ShouldQueue
                                                     return [
                                                         'team_id' => $voter->team_id,
                                                         'team_name' => $voter->team_by->fullname,
+                                                        'district_coor_name' => $voter->district_coor->fullname,
+                                                        'village_coor_name' => $voter->village_coor->fullname,
+                                                        'tps_coor_name' => $voter->tps_coor->fullname,
                                                         'voter' => $voter->toArray(),
                                                     ];
                                                 })
                                                 // ->groupBy('team_id')
-                                                ->mapToGroups(fn($group) => [$group['team_id'] => [
+                                                ->mapToGroups(fn($group) =>
+                                                [$group['team_id'] => [
                                                     'team_id' => $group['team_id'],
                                                     'team_name' => $group['team_name'],
+                                                    'district_coor_name' => $group['district_coor_name'],
+                                                    'village_coor_name' => $group['village_coor_name'],
+                                                    'tps_coor_name' => $group['tps_coor_name'],
                                                     ...$group['voter']
                                                 ]])
                                                 ->values()

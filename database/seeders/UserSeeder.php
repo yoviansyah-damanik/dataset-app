@@ -33,6 +33,15 @@ class UserSeeder extends Seeder
             'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
         ])->assignRole('Administrator');
 
+
+        \App\Models\User::create([
+            'username' => 'koordinator_kecamatan_utara',
+            'fullname' => 'Koordinator Utara',
+            'email' => 'koor_utara@gmail.com',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
+        ])->assignRole('Koordinator Kecamatan');
+
         \App\Models\User::create([
             'username' => 'admin_psp_selatan',
             'fullname' => 'Admin Selatan',

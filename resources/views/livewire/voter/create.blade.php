@@ -175,7 +175,7 @@
             </div>
             <div class="input-group mx-auto has-validation" style="width:100%; max-width:480px">
                 <input type="text" maxlength="16" class="form-control @error('cek_nik') is-invalid @enderror"
-                    id="cek_nik" wire:model.defer="cek_nik">
+                    id="cek_nik" wire:model.defer="cek_nik" wire:keyup.enter="check_nik">
                 <button class="btn btn-primary" wire:click="check_nik" type="button" id="button-addon2">Cek
                     NIK</button>
                 @error('cek_nik')

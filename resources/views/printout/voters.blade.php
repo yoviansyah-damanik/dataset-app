@@ -187,21 +187,21 @@
                             </td>
                             <td>
                                 <span class="fw-bold">:</span>
-                                {{ $created_at }}
+                                {{ $team[0]['district_coor_name'] }}
                             </td>
                             <td style="width: 150px">
                                 <span class="fw-bold">Koordinator Kelurahan/Desa</span>
                             </td>
                             <td>
                                 <span class="fw-bold">:</span>
-                                {{ $village['name'] }}
+                                {{ $team[0]['village_coor_name'] }}
                             </td>
                             <td style="width: 150px">
                                 <span class="fw-bold">Koordinator TPS</span>
                             </td>
                             <td>
                                 <span class="fw-bold">:</span>
-                                {{ $team[0]['team_name'] }}
+                                {{ $team[0]['tps_coor_name'] }}
                             </td>
                         </tr>
                     </table>
