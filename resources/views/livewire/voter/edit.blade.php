@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-7 col-lg-5">
                     <div class="form-group mb-3 position-relative">
-                        <label for="nama" class="form-label">Nama</label>
+                        <label for="nama" class="form-label label-important">Nama</label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
                             wire:model.lazy='nama'>
                         @error('nama')
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group mb-3 position-relative">
-                        <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                        <label for="jenis_kelamin" class="form-label label-important">Jenis Kelamin</label>
                         <div id="jenis_kelamin">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mb-3 position-relative">
-                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                        <label for="tempat_lahir" class="form-label label-important">Tempat Lahir</label>
                         <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
                             id="tempat_lahir" wire:model.lazy="tempat_lahir">
                         @error('tempat_lahir')
@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3 position-relative">
-                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                        <label for="tanggal_lahir" class="form-label label-important">Tanggal Lahir</label>
                         <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
                             id="date" wire:model.lazy="tanggal_lahir">
                         @error('tanggal_lahir')
@@ -223,7 +223,7 @@
                 </div> --}}
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="agama" class="form-label">Agama</label>
+                        <label for="agama" class="form-label label-important">Agama</label>
                         <select id="religion_id" class="form-select @error('agama') is-invalid @enderror">
                             @foreach ($religions as $religion)
                                 <option value="{{ $religion->id }}">{{ $religion->name }}</option>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="status_perkawinan" class="form-label">Status Perkawinan</label>
+                        <label for="status_perkawinan" class="form-label label-important">Status Perkawinan</label>
                         <select id="marital_status_id"
                             class="form-select @error('status_perkawinan') is-invalid @enderror">
                             @foreach ($marital_statuses as $marital_status)
@@ -254,7 +254,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="pekerjaan" class="form-label">Pekerjaan</label>
+                        <label for="pekerjaan" class="form-label label-important">Pekerjaan</label>
                         <select id="profession_id" class="form-select @error('pekerjaan') is-invalid @enderror">
                             @foreach ($professions as $profession)
                                 <option value="{{ $profession->id }}">{{ $profession->name }}</option>
@@ -269,7 +269,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="kewarganegaraan" class="form-label">Kewarganegaraan</label>
+                        <label for="kewarganegaraan" class="form-label label-important">Kewarganegaraan</label>
                         <select id="nasionality_id"
                             class="form-select @error('kewarganegaraan') is-invalid @enderror">
                             @foreach ($nasionalities as $nasionality)
@@ -302,23 +302,25 @@
                         @enderror
                     </div>
                     <div class="accordion accordion-flush" id="accordionFlushExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingKtpOne">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseKtpOne" aria-expanded="false"
-                                    aria-controls="flush-collapseKtpOne">
-                                    Foto KTP Saat Ini
-                                </button>
-                            </h2>
-                            <div id="flush-collapseKtpOne" class="accordion-collapse collapse"
-                                aria-labelledby="flush-headingKtpOne" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">
-                                    <div class="preview">
-                                        <img src="{{ $preview_ktp_old }}" class="w-100" alt="preview">
+                        @if ($preview_ktp_old)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingKtpOne">
+                                    <button class="accordion-button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseKtpOne"
+                                        aria-expanded="false" aria-controls="flush-collapseKtpOne">
+                                        Foto KTP Saat Ini
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseKtpOne" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingKtpOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <div class="preview">
+                                            <img src="{{ $preview_ktp_old }}" class="w-100" alt="preview">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                         @if ($preview_ktp)
                             <div class="accordion-item">
                                 <h2 class="accordion-header d-flex gap-3" id="flush-headingKtpTwo">
@@ -357,23 +359,25 @@
                         @enderror
                     </div>
                     <div class="accordion accordion-flush" id="accordionFlushExample2">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingKkOne">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseKkOne" aria-expanded="false"
-                                    aria-controls="flush-collapseKkOne">
-                                    Foto KK Saat Ini
-                                </button>
-                            </h2>
-                            <div id="flush-collapseKkOne" class="accordion-collapse collapse"
-                                aria-labelledby="flush-headingKkOne" data-bs-parent="#accordionFlushExample2">
-                                <div class="accordion-body">
-                                    <div class="preview">
-                                        <img src="{{ $preview_kk_old }}" class="w-100" alt="preview">
+                        @if ($preview_kk_old)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingKkOne">
+                                    <button class="accordion-button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseKkOne"
+                                        aria-expanded="false" aria-controls="flush-collapseKkOne">
+                                        Foto KK Saat Ini
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseKkOne" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingKkOne" data-bs-parent="#accordionFlushExample2">
+                                    <div class="accordion-body">
+                                        <div class="preview">
+                                            <img src="{{ $preview_kk_old }}" class="w-100" alt="preview">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                         @if ($preview_kk)
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="flush-headingKkTwo">

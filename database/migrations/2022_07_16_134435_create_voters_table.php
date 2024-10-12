@@ -58,18 +58,22 @@ return new class extends Migration
                 ->on('tps')
                 ->index();
             $table->foreignUuid('district_coor_id')
+                ->nullable()
                 ->reference('id')
                 ->on('users')
                 ->index();
             $table->foreignUuid('village_coor_id')
+                ->nullable()
                 ->reference('id')
                 ->on('users')
                 ->index();
             $table->foreignUuid('tps_coor_id')
+                ->nullable()
                 ->reference('id')
                 ->on('users')
                 ->index();
             $table->foreignUuid('team_id')
+                ->nullable()
                 ->reference('id')
                 ->on('users')
                 ->index();

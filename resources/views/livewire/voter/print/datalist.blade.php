@@ -11,7 +11,7 @@
                 <th>#</th>
                 <th>Rincian</th>
                 <th>Tipe</th>
-                <th>Kecamatan</th>
+                <th>Payload</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </thead>
@@ -30,14 +30,18 @@
                             </div>
                             <div>
                                 <strong>Tanggal dibuat:</strong>
-                                {{ $history->created_at->format('d M Y H:i:s') }}
+                                {{ $history->created_at->translatedFormat('d M Y H:i:s') }}
                             </div>
                         </td>
                         <td class="text-center">
                             {{ $history->type }}
                         </td>
-                        <td class="text-center">
-                            {{ $history->district_id == 0 ? 'Semua Kecamatan' : $history->district->name }}
+                        <td>
+                            @foreach (json_decode($history->payload, true) as $key => $value)
+                                <div>
+                                    <strong>{{ $key }}:</strong> {{ $value }}
+                                </div>
+                            @endforeach
                         </td>
                         <td class="text-center">
                             @if ($history->status == 'on_progress')

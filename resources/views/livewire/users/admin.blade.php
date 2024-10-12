@@ -27,7 +27,6 @@
                     <th>#</th>
                     <th>Nama Pengguna</th>
                     <th>Nama Lengkap</th>
-                    <th>Email</th>
                     <th>Kecamatan</th>
                     <th>Kata Sandi Baru</th>
                 </tr>
@@ -43,9 +42,6 @@
                         </td>
                         <td>
                             {{ $user['fullname'] }}
-                        </td>
-                        <td>
-                            {{ $user['email'] }}
                         </td>
                         <td>
                             {{ $user['district_name'] }}

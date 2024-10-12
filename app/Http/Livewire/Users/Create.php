@@ -49,7 +49,7 @@ class Create extends Component
         $rules =  [
             'username' => 'required|unique_encrypted:users,username|max:16',
             'fullname' => 'required',
-            'email' => 'required|email:dns|unique_encrypted:users,email',
+            // 'email' => 'required|email:dns|unique_encrypted:users,email',
             'password' => 'required|min:8',
             'role_name' => [
                 'required',
@@ -136,7 +136,7 @@ class Create extends Component
         $new_user->username = $this->username;
         $new_user->fullname = $this->fullname;
         $new_user->email = $this->email;
-        if ($this->role_name == 'Koordinator Kecamatan') {
+        if (in_array($this->role_name, ['Koordinator Kecamatan', 'Administrator'])) {
             $new_user->district_id = $this->district_id;
         } elseif ($this->role_name == 'Koordinator Kelurahan/Desa') {
             $new_user->district_id = $this->district_id;

@@ -65,9 +65,10 @@
 
     @if ($step != 1 || $remember)
         @if ($remember && $step == 1)
-            <div class="mb-3 text-center">
+            <div class="alert alert-warning">
                 Anda memilih untuk menggunakan Tim Bersinar dan Koordinator yang sama.<br />
-                Fitur ini hanya meminta anda untuk melakukan pengecekan NIK dan DPT tanpa perlu memilih Tim Bersinar dan
+                Fitur ini hanya meminta anda untuk melakukan pengecekan NIK dan DPT di wilayah yang sama dengan Pemilih
+                sebelumnya tanpa perlu memilih Tim Bersinar dan
                 Koordinator kembali.
             </div>
         @endif
@@ -289,7 +290,7 @@
         <div class="card-2">
             <div class="mb-3 input-group">
                 <input type="text" placeholder="Cari Tim Bersinar..." class="form-control" wire:model="search">
-                @if (auth()->user()->role_name == 'Superadmin')
+                {{-- @if (auth()->user()->role_name == 'Superadmin')
                     <select class="form-select" wire:model="district" wire:change="reset_region('district')">
                         @foreach ($districts as $district)
                             <option value="{{ $district->id }}">{{ $district->name }}</option>
@@ -305,7 +306,7 @@
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
-                @endif
+                @endif --}}
             </div>
             <div class="overflow-auto" style="max-height:450px">
                 <table class="table table-striped table-sm">
@@ -639,7 +640,7 @@
                 <div class="row">
                     <div class="col-md-5 col-lg-3">
                         <div class="form-group mb-3 position-relative">
-                            <label for="nik" class="form-label">NIK</label>
+                            <label for="nik" class="form-label label-important">NIK</label>
                             <input type="text" readonly maxlength="16"
                                 class="form-control is-valid @error('nik') is-invalid @enderror" id="nik"
                                 wire:model.defer="nik">
@@ -656,7 +657,7 @@
                     </div>
                     <div class="col-md-7 col-lg-5">
                         <div class="form-group mb-3 position-relative">
-                            <label for="nama" class="form-label">Nama</label>
+                            <label for="nama" class="form-label label-important">Nama</label>
                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                 id="nama" wire:model.defer='nama'>
                             @error('nama')
@@ -668,7 +669,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group mb-3 position-relative">
-                            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                            <label for="jenis_kelamin" class="form-label label-important">Jenis Kelamin</label>
                             <div id="jenis_kelamin">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
@@ -694,7 +695,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group mb-3 position-relative">
-                            <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                            <label for="tempat_lahir" class="form-label label-important">Tempat Lahir</label>
                             <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
                                 id="tempat_lahir" wire:model.defer="tempat_lahir">
                             @error('tempat_lahir')
@@ -706,9 +707,10 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3 position-relative">
-                            <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                                id="date" wire:model.defer="tanggal_lahir">
+                            <label for="tanggal_lahir" class="form-label label-important">Tanggal Lahir</label>
+                            <input type="date" placeholder="dd/mm/yyyy"
+                                class="form-control @error('tanggal_lahir') is-invalid @enderror" id="date"
+                                wire:model.defer="tanggal_lahir">
                             @error('tanggal_lahir')
                                 <div class="invalid-tooltip">
                                     {{ $message }}
@@ -769,7 +771,7 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
                             <div class="form-group" wire:ignore>
-                                <label for="agama" class="form-label">Agama</label>
+                                <label for="agama" class="form-label label-important">Agama</label>
                                 <select id="religion_id" class="form-select @error('agama') is-invalid @enderror">
                                     @foreach ($religions as $religion)
                                         <option value="{{ $religion->id }}">{{ $religion->name }}</option>
@@ -786,7 +788,8 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
                             <div class="form-group" wire:ignore>
-                                <label for="status_perkawinan" class="form-label">Status Perkawinan</label>
+                                <label for="status_perkawinan" class="form-label label-important">Status
+                                    Perkawinan</label>
                                 <select id="marital_status_id"
                                     class="form-select @error('status_perkawinan') is-invalid @enderror">
                                     @foreach ($marital_statuses as $marital_status)
@@ -805,7 +808,7 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
                             <div class="form-group" wire:ignore>
-                                <label for="pekerjaan" class="form-label">Pekerjaan</label>
+                                <label for="pekerjaan" class="form-label label-important">Pekerjaan</label>
                                 <select id="profession_id"
                                     class="form-select @error('pekerjaan') is-invalid @enderror">
                                     @foreach ($professions as $profession)
@@ -823,7 +826,8 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
                             <div class="form-group" wire:ignore>
-                                <label for="kewarganegaraan" class="form-label">Kewarganegaraan</label>
+                                <label for="kewarganegaraan"
+                                    class="form-label label-important">Kewarganegaraan</label>
                                 <select id="nasionality_id"
                                     class="form-select @error('kewarganegaraan') is-invalid @enderror">
                                     @foreach ($nasionalities as $nasionality)
@@ -867,6 +871,8 @@
                                             <div class="preview">
                                                 <img src="{{ $preview_ktp }}" class="w-100" alt="preview">
                                             </div>
+                                            <button class="btn btn-sm btn-danger mt-3" type="button"
+                                                wire:click="setNull('ktp')">Hapus KTP</button>
                                         </div>
                                     </div>
                                 </div>
@@ -899,6 +905,8 @@
                                         <div class="accordion-body">
                                             <div class="preview">
                                                 <img src="{{ $preview_kk }}" class="w-100" alt="preview">
+                                                <button class="btn btn-sm btn-danger mt-3" type="button"
+                                                    wire:click="setNull('kk')">Hapus KK</button>
                                             </div>
                                         </div>
                                     </div>
@@ -918,7 +926,7 @@
     @endif
 </div>
 
-@push('scripts')
+{{-- @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
             setAdditionalInput(true)
@@ -981,4 +989,4 @@
             setAdditionalInput(e.detail.is_empty)
         })
     </script>
-@endpush
+@endpush --}}

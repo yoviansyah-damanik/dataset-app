@@ -20,9 +20,7 @@ return new class extends Migration
             $table->string('filename');
             $table->string('type');
             $table->string('path');
-            $table->foreignId('district_id')
-                ->reference('id')
-                ->on('districts');
+            $table->text('payload');
             $table->foreignUuid('user_id')
                 ->reference('id')
                 ->on('users');

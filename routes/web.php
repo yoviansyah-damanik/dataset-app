@@ -25,9 +25,99 @@ Route::get('/login', [AuthController::class, 'index'])->middleware('guest')->nam
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('login.do');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::middleware('auth', 'role:Superadmin|Administrator|Koordinator Kecamatan|Koordinator Kelurahan/Desa|Koordinator TPS|Tim Bersinar')
+Route::middleware('auth')
     ->group(
         function () {
+            Route::get('/read-csv/{type}/{session}', function () {
+                $data_added = new Illuminate\Support\Collection;
+                try {
+                    set_time_limit(0);
+                    // \Illuminate\Support\Facades\DB::table('role_has_permissions')->truncate();
+                    // \Illuminate\Support\Facades\DB::table('model_has_roles')->truncate();
+                    // \Illuminate\Support\Facades\DB::table('model_has_permissions')->truncate();
+                    // \App\Models\User::truncate();
+                    // \Spatie\Permission\Models\Permission::truncate();
+                    // \Spatie\Permission\Models\Role::truncate();
+                    if (request()->type == 'kecamatan') {
+                        // START DISTRICT COOR
+                        $file = fopen("koor kecamatan.csv", "r");
+                        $district_coor = new Illuminate\Support\Collection;
+                        while (! feof($file)) {
+                            $data = fgetcsv($file);
+                            if ($data)
+                                $district_coor->push([
+                                    'username' => \Illuminate\Support\Str::of($data[1] . ' ' . $data[0])->lower()->snake()->value,
+                                    'fullname' => $data[1],
+                                    'district' => "PADANGSIDIMPUAN $data[0]"
+                                ]);
+                        }
+                        fclose($file);
+
+                        $district_coor->shift();
+                        $district_coor->all();
+
+                        foreach ($district_coor as $coor) {
+                            \App\Models\User::create([
+                                'username' => $coor['username'],
+                                'fullname' => $coor['fullname'],
+                                'district_id' => \App\Models\District::where('name', $coor['district'])->first()->id,
+                                'password' => bcrypt($coor['username'])
+                            ])->assignRole('Koordinator Kecamatan');
+                            $data_added->push($coor);
+                        }
+                    }
+
+
+                    if (request()->type == 'lainnya') {
+                        // START VILLAGE COOR, TPS COOR, TEAM
+                        $file1 = fopen("koor kelurahan, koor tps, tim bersinar.csv", "r");
+                        $file2 = fopen("koor kelurahan, koor tps, tim bersinar 2.csv", "r");
+                        $file3 = fopen("koor kelurahan, koor tps, tim bersinar 3.csv", "r");
+                        // 0 => Kode
+                        // 1 => Nama
+                        // 2 => Peran
+                        // 3 => Kecamatan
+                        // 4 => Kelurahan
+                        // 5 => TPS
+
+                        while (! feof(${'file' . request()->session})) {
+                            $data = fgetcsv(${'file' . request()->session});
+                            if ($data) {
+                                $username = $data[0] . ' ' . explode(' ', $data[1])[0];
+                                if (count(explode(' ', $data[1])) > 1)
+                                    $username .= ' ' . explode(' ', $data[1])[1];
+
+                                $username = \Illuminate\Support\Str::of($username)->lower()->snake()->value;
+
+                                if (in_array($data[2], ['Koordinator Kelurahan/Desa', 'Koordinator TPS']))
+                                    $username = "coor_" . $username;
+
+                                $payload = [
+                                    'username' => $username,
+                                    'fullname' => $data[1],
+                                    'district_id' => \App\Models\District::where('name', "PADANGSIDIMPUAN $data[3]")->first()->id,
+                                    'village_id' => \App\Models\Village::where('name', $data[4])->first()->id,
+                                    'tps_id' => \App\Models\Tps::where('name', "TPS $data[5]")->first()->id,
+                                    'password' => bcrypt($username)
+                                ];
+
+                                \App\Models\User::create($payload)->assignRole($data[2]);
+
+                                $data_added->push([
+                                    ...$payload,
+                                    'peran' => $data[2]
+                                ]);
+                            }
+                        }
+                        fclose(${'file' . request()->session});
+                    }
+
+                    echo "Done";
+                } catch (\Exception $e) {
+                    ddd($e->getMessage(), $data_added->last());
+                }
+            })->middleware('role:superadmin');
+
             Route::get('/', [DatasetController::class, 'index'])->name('dashboard');
 
             // Route::get('/', function () {
@@ -54,14 +144,17 @@ Route::middleware('auth', 'role:Superadmin|Administrator|Koordinator Kecamatan|K
             Route::get('/voter/migration', [VoterController::class, 'migration'])
                 ->middleware('permission:migration voter')
                 ->name('voters.migration');
+            Route::get('/voter/transfer', [VoterController::class, 'transfer'])
+                ->middleware('permission:transfer voter')
+                ->name('voters.transfer');
             Route::get('/voter/print', [VoterController::class, 'print'])
                 ->middleware('permission:print voter')
                 ->name('voters.print');
             Route::get('/voter/{voter:id}', [VoterController::class, 'show'])
-                ->middleware('permission:read voter')
+                ->middleware(['permission:show voter', 'voter_access'])
                 ->name('voters.show');
             Route::get('/voter/{voter:id}/edit', [VoterController::class, 'edit'])
-                ->middleware('permission:update voter')
+                ->middleware(['permission:update voter', 'voter_access'])
                 ->name('voters.edit');
             Route::get('/voter/{voter:id}/delete', [VoterController::class, 'delete'])
                 ->middleware('permission:delete voter')

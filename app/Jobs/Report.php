@@ -23,19 +23,21 @@ class Report implements ShouldQueue
     public $tries = 1;
     public $timeout = 0;
 
-    public $type, $filename, $view, $payload, $district, $paper, $path, $history;
     /**
      * Create a new job instance.
      */
     public function __construct(
-        $type,
-        $district = 'semua',
-        $filename,
-        $path,
-        $view,
-        $paper,
-        $payload,
-        $history
+        public $type,
+        public $district = 'semua',
+        public $village = 'semua',
+        public $tps = 'semua',
+        public $team = 'semua',
+        public $filename,
+        public $path,
+        public $view,
+        public $paper,
+        public $payload,
+        public $history
     ) {
         $this->type = $type;
         $this->district = $district;
@@ -123,10 +125,13 @@ class Report implements ShouldQueue
                 ];
             });
 
-        $voters_by_gender = Voter::selectRaw('gender, count(*) as voters_count')
+        $voters_by_gender = Voter::selectRaw(
+            'IFNULL(SUM(CASE WHEN gender = \'Laki-laki\' THEN 1 ELSE 0 END),0) AS \'Laki-laki\',' .
+                'IFNULL(SUM(CASE WHEN gender = \'Perempuan\' THEN 1 ELSE 0 END),0) AS \'Perempuan\''
+        )
             ->when($this->district != 'semua', fn($q) => $q->where('district_id', $this->district))
-            ->groupBy('gender')
-            ->get();
+            ->get()
+            ->toArray()[0];
 
         $voters_by_profession = DB::table('professions', 'p')
             ->selectRaw('p.name, count(v.id) as voters_count')
@@ -197,6 +202,22 @@ class Report implements ShouldQueue
             ->when($this->district != 'semua', fn($q) => $q->where('district_id', $this->district))
             ->whereDate('date_of_birth', '<=', $end);
         $age_55_up = $age_55_up->first()->voters_count;
+
+        // dd(
+        //     $total_count_voters,
+        //     $voters_all_total,
+        //     $voters_all_count,
+        //     $voters_by_gender,
+        //     $voters_by_profession,
+        //     $voters_by_religion,
+        //     $voters_by_nasionality,
+        //     $voters_by_marital_status,
+        //     $age_17_25,
+        //     $age_25_35,
+        //     $age_35_45,
+        //     $age_45_55,
+        //     $age_55_up,
+        // );
 
         return [
             'total_count_voters' => $total_count_voters,

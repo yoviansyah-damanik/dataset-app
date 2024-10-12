@@ -17,8 +17,8 @@ class Datalist extends Component
 
     public function render()
     {
-        $histories = PrintHistory::with('user', 'district')->latest()
-            ->paginate(10);
+        $histories = PrintHistory::with('user')->latest()
+            ->paginate(5);
 
         return view('livewire.voter.print.datalist', compact('histories'));
     }

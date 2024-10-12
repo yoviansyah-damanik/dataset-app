@@ -17,7 +17,7 @@
     </div>
     <div class="card-2">
         <div class="row mb-3">
-            <div class="col-sm-2">
+            <div class="col-sm-3 mb-3">
                 <div class="input-group">
                     <div class="input-group-text" id="per_page">
                         <i class="fas fa-pager"></i>
@@ -30,13 +30,70 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <select class="form-select" wire:model='district'>
+                            <option value="">--Tidak ada kecamatan dipilih--</option>
+                            @foreach ($districts as $district)
+                                <option value="{{ $district->id }}">{{ $district->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <select class="form-select" wire:model='village'>
+                            <option value="">--Tidak ada kelurahan/desa dipilih--</option>
+                            @foreach ($villages as $village)
+                                <option value="{{ $village->id }}">{{ $village->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <select class="form-select" wire:model='tps'>
+                            <option value="">--Tidak ada TPS dipilih--</option>
+                            @foreach ($tpses as $tps)
+                                <option value="{{ $tps->id }}">{{ $tps->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
                 <div class="input-group">
                     <div class="input-group-text" id="btnGroupAddon2">
                         <i class="fas fa-search"></i>
                     </div>
                     <input type="search" class="form-control w-50" id="colFormLabelSm"
                         placeholder="Cari berdasarkan Nama DPT..." wire:model="search">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <div class="input-group-text" id="per_page">
+                        <i class="fas fa-pager"></i>
+                    </div>
+                    <select class="form-select" wire:model="status">
+                        <option value="semua">Semua</option>
+                        <option value="terdata">Terdata</option>
+                        <option value="belum_terdata">Belum Terdata</option>
+                    </select>
                 </div>
             </div>
         </div>

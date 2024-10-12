@@ -62,7 +62,6 @@
                     <th>#</th>
                     <th>Nama Pengguna</th>
                     <th>Nama Lengkap</th>
-                    <th>Email</th>
                     <th>Peran</th>
                     <th>Kecamatan</th>
                     <th>Kelurahan/Desa</th>
@@ -82,9 +81,6 @@
                         </td>
                         <td>
                             {{ $user->fullname }}
-                        </td>
-                        <td>
-                            {{ $user->email }}
                         </td>
                         <td>
                             {{ $user->role_name }}

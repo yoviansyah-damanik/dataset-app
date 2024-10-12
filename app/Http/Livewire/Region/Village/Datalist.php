@@ -36,7 +36,7 @@ class Datalist extends Component
                     . 'v.village_id = vl.id '
                     . 'and v.tps_id in (select t.id from tps as t where t.village_id = vl.id))'
                     . 'as voters_count, '
-                    . '(select sum(voters_total) from tps as t where t.village_id = vl.id) as voters_total'
+                    . '(select count(dpts.id) from dpts where dpts.village_id = vl.id) as dpts_count'
             )
             ->join('districts as d', 'vl.district_id', '=', 'd.id')
             ->where('vl.name', 'like', "%$this->s%")
@@ -44,7 +44,7 @@ class Datalist extends Component
 
         $get_data = $villages->get();
         $villages_voters_count = $get_data->sum('voters_count');
-        $villages_voters_total = $get_data->sum('voters_total');
+        $villages_voters_total = $get_data->sum('dpts_count');
 
         $villages = $villages->paginate($this->limit, ['*'], 'villagesPage');
 

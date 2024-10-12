@@ -17,6 +17,7 @@ use App\Models\MaritalStatus;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Create extends Component
@@ -54,7 +55,7 @@ class Create extends Component
     public $valid_message;
     public $dpts, $dpt;
     public $data;
-    public $district_coor, $village_coor, $tps_coor, $team;
+    public $district_coor, $village_coor, $tps_coor, $team, $family_coor;
     public $is_nik_valid = false;
     public $search;
     public $remember = false;
@@ -79,57 +80,54 @@ class Create extends Component
         if ($this->step == 1) {
             $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', '%' . $this->search . '%')
                 ->whereDoesntHave('voter')
+                ->when(
+                    auth()->user()->role_name != 'Superadmin',
+                    fn($q) => $q->where('district_id', auth()->user()->district_id)
+                )
+                ->when(
+                    $this->remember,
+                    fn($q) => $q->where('district_id', $this->kecamatan)
+                        ->where('village_id', $this->kelurahan)
+                        ->where('tps_id', $this->tps),
+                )
                 ->limit(10)
                 ->get();
         }
 
         if ($this->step == 2) {
-            if (auth()->user()->role_name == 'Superadmin') {
-                $this->districts = District::get();
+            // if (auth()->user()->role_name == 'Superadmin') {
+            //     $this->districts = District::get();
 
-                if (!$this->district)
-                    $this->district = $this->districts->first()->id;
+            //     if (!$this->district)
+            //         $this->district = $this->districts->first()->id;
 
-                $this->villages = Village::when(
-                    $this->district,
-                    fn($q) => $q->where('district_id', $this->district),
-                    fn($q) => $q->whereNull('id')
-                )
-                    ->get();
+            //     $this->villages = Village::when(
+            //         $this->district,
+            //         fn($q) => $q->where('district_id', $this->district),
+            //         fn($q) => $q->whereNull('id')
+            //     )
+            //         ->get();
 
-                if (!$this->village)
-                    $this->village = $this->villages->first()->id;
+            //     if (!$this->village)
+            //         $this->village = $this->villages->first()->id;
 
-                $this->tpses = Tps::when(
-                    $this->village,
-                    fn($q) => $q->where('village_id', $this->village),
-                    fn($q) => $q->whereNull('id')
-                )
-                    ->get();
+            //     $this->tpses = Tps::when(
+            //         $this->village,
+            //         fn($q) => $q->where('village_id', $this->village),
+            //         fn($q) => $q->whereNull('id')
+            //     )
+            //         ->get();
 
-                if (!$this->tps_)
-                    $this->tps_ = $this->tpses->first()->id;
-            }
+            //     if (!$this->tps_)
+            //         $this->tps_ = $this->tpses->first()->id;
+            // }
 
             $this->data = User::with('voters_by_team', 'district', 'village', 'tps', 'roles')
                 ->withCount('voters_by_team')
                 ->role('Tim Bersinar')
-                ->when(
-                    auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id),
-                    fn($q) => $q->when(
-                        $this->district,
-                        fn($r) => $r->where('district_id', $this->district)
-                    )
-                        ->when(
-                            $this->village,
-                            fn($r) => $r->where('village_id', $this->village)
-                        )
-                        ->when(
-                            $this->tps_,
-                            fn($r) => $r->where('tps_id', $this->tps_)
-                        )
-                )
+                ->where('district_id', $this->dpt->district_id)
+                ->where('village_id', $this->dpt->village_id)
+                ->where('tps_id', $this->dpt->tps_id)
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
                 ->limit(10)
                 ->get();
@@ -172,8 +170,8 @@ class Create extends Component
             $this->reset('data');
         }
 
-        $this->dispatchBrowserEvent('reloadDistrict', ['is_empty' => false]);
-        $this->dispatchBrowserEvent('reloadAdditionalInput', ['is_empty' => false]);
+        // $this->dispatchBrowserEvent('reloadDistrict', ['is_empty' => false]);
+        // $this->dispatchBrowserEvent('reloadAdditionalInput', ['is_empty' => false]);
         return view('livewire.voter.create');
     }
 
@@ -286,19 +284,23 @@ class Create extends Component
                 Rule::in($this->nasionalities->pluck('id')->toArray())
             ],
             'no_telp' => 'nullable|numeric',
-            'ktp' => 'required|file|image|max:2048',
-            'kk' => 'required|file|image|max:2048',
+            'ktp' => 'nullable|file|image|max:2048',
+            'kk' => 'nullable|file|image|max:2048',
         ]);
 
         DB::beginTransaction();
         try {
-            $ktp_filename = $this->kk->store('voters', 'public');
-            $kk_filename = $this->ktp->store('voters', 'public');
+            if ($this->kk)
+                $ktp_filename = $this->kk->store('voters', 'public');
+            if ($this->ktp)
+                $kk_filename = $this->ktp->store('voters', 'public');
 
             $new_voter = new Voter;
             $new_voter->name = $this->nama;
-            $new_voter->ktp = $ktp_filename;
-            $new_voter->kk = $kk_filename;
+            if ($this->ktp)
+                $new_voter->ktp = $ktp_filename;
+            if ($this->kk)
+                $new_voter->kk = $kk_filename;
             $new_voter->nik = $this->nik;
             $new_voter->address = $this->alamat ?? null;
             $new_voter->place_of_birth = $this->tempat_lahir;
@@ -322,15 +324,46 @@ class Create extends Component
             $new_voter->dpt_id = $this->dpt->id;
             $new_voter->save();
 
+            History::makeHistory('Membuat Pemilih dengan ID: ' . $new_voter->id, $new_voter, 'create', ref_id: $new_voter->id);
+
+            $permission = Permission::create(['name' => 'show voter ' . $new_voter->id]);
+
+            // if (auth()->user()->role_name == 'Administrator Keluarga') {
+            //     $ids = [auth()->user()->id, $this->family_coor->id];
+
+            //     User::whereIn('id', $ids)
+            //         ->get()
+            //         ->each(
+            //             function ($user) use ($permission) {
+            //                 $user->givePermissionTo($permission);
+            //             }
+            //         );
+            // }
+
+            // User::where('district_id', $this->kecamatan)
+            //     ->orWhere('village_id', $this->kelurahan)
+            //     ->orWhere('tps_id', $this->tps)
+            //     ->role([
+            //         'Superadmin',
+            //         'Administrator',
+            //         'Koordinator Kecamatan',
+            //         'Koordinator Kelurahan/Desa',
+            //         'Koordinator TPS'
+            //     ])
+            //     ->get()
+            //     ->each(
+            //         function ($user) use ($permission) {
+            //             $user->givePermissionTo($permission);
+            //         }
+            //     );
+
+            DB::commit();
+            $this->alert('success', 'Berhasil menambahkan pemilih.');
+
             if (!$this->remember)
                 $this->reset_semua();
             else
                 $this->reset_sebagian();
-
-            History::makeHistory('Membuat Pemilih dengan ID: ' . $new_voter->id, $new_voter, 'create', ref_id: $new_voter->id);
-
-            DB::commit();
-            $this->alert('success', 'Berhasil menambahkan pemilih.');
         } catch (\Exception $e) {
             DB::rollBack();
             $this->alert('error', $e->getMessage());
@@ -351,7 +384,12 @@ class Create extends Component
             'status_perkawinan'
         ]);
 
-        $this->dispatchBrowserEvent('reloadAdditionalInput', ['is_empty' => true]);
+        $this->agama = $this->religions->first()->id;
+        $this->kewarganegaraan = $this->nasionalities->first()->id;
+        $this->pekerjaan = $this->professions->first()->id;
+        $this->status_perkawinan = $this->marital_statuses->first()->id;
+
+        // $this->dispatchBrowserEvent('reloadAdditionalInput', ['is_empty' => true]);
 
         $this->nama = $this->dpt->name;
         $this->jenis_kelamin = $this->dpt->genderFull;
@@ -390,6 +428,16 @@ class Create extends Component
         $this->reset();
         $this->resetValidation();
         $this->step = 1;
+    }
+
+    public function setNull($type)
+    {
+        if ($type == 'ktp') {
+            $this->reset(['ktp', 'preview_ktp']);
+        }
+        if ($type == 'kk') {
+            $this->reset(['kk', 'preview_kk']);
+        }
     }
 
     public function reset_sebagian()

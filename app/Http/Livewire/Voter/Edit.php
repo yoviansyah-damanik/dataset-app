@@ -85,10 +85,14 @@ class Edit extends Component
         $this->status_perkawinan = $voter->marital_status_id;
         $this->pekerjaan = $voter->profession_id;
         $this->kewarganegaraan = $voter->nasionality_id;
-        $this->current_ktp = $voter->ktp;
-        $this->current_kk = $voter->kk;
-        $this->preview_ktp_old = $voter->ktp_path;
-        $this->preview_kk_old = $voter->kk_path;
+        if ($voter->ktp) {
+            $this->current_ktp = $voter->ktp;
+            $this->preview_ktp_old = $voter->ktp_path;
+        }
+        if ($voter->kk) {
+            $this->current_kk = $voter->kk;
+            $this->preview_kk_old = $voter->kk_path;
+        }
         $this->no_telp = $voter->phone_number;
 
         // $this->dispatchBrowserEvent('reloadAdditionalInput');
@@ -200,13 +204,15 @@ class Edit extends Component
         try {
             $ktp = $this->ktp;
             if ($ktp) {
-                Storage::disk('public')->delete($this->current_ktp);
+                if ($this->current_ktp)
+                    Storage::disk('public')->delete($this->current_ktp);
                 $ktp_filename = $ktp->store('voters', 'public');
             }
 
             $kk = $this->kk;
             if ($kk) {
-                Storage::disk('public')->delete($this->current_kk);
+                if ($this->current_kk)
+                    Storage::disk('public')->delete($this->current_kk);
                 $kk_filename = $kk->store('voters', 'public');
             }
 
@@ -240,60 +246,5 @@ class Edit extends Component
         } catch (\Exception $e) {
             $this->alert('error', $e->getMessage());
         }
-    }
-
-    public function set_villages()
-    {
-        $villages = $this->villages_data();
-        $this->kelurahan = $villages->first()->id;
-
-        $this->dispatchBrowserEvent('setVillageData', $villages->map(function ($q, $index) {
-            $data = [
-                'id' => $q->id,
-                'text' => $q->name
-            ];
-            if ($index == 0) {
-                $data += [
-                    'selected' => true
-                ];
-                $this->kelurahan = $q->id;
-            }
-            return $data;
-        }));
-    }
-
-    public function set_tpses()
-    {
-        $tpses =  $this->tpses_data();
-        $this->tps = $tpses->first()->id;
-
-        $this->dispatchBrowserEvent('setTpsData', $tpses->map(function ($q, $index) {
-            $data = [
-                'id' => $q->id,
-                'text' => $q->name
-            ];
-            if ($index == 0) {
-                $data += [
-                    'selected' => true
-                ];
-                $this->tps = $q->id;
-            }
-            return $data;
-        }));
-    }
-
-    public function villages_data()
-    {
-        return Village::where('district_id', $this->kecamatan)
-            ->limit(10)
-            ->get();
-    }
-
-    public function tpses_data()
-    {
-        return Tps::whereHas('village', fn($q) => $q->where('district_id', $this->kecamatan))
-            ->where('village_id', $this->kelurahan)
-            ->limit(10)
-            ->get();
     }
 }

@@ -58,12 +58,12 @@
                         {{ $district->villages_count }} Kelurahan/Desa
                     </td>
                     <td class="text-center">
-                        @if ($district->voters_count < $district->voters_total)
+                        @if ($district->voters_count < $district->dpts_count)
                             <span class="text-danger" data-bs-toggle="tooltip"
                                 title="Jumlah pemilih kurang dari total DPT!">
                                 <i class="fas fa-arrow-down"></i>
                             </span>
-                        @elseif($district->voters_count > $district->voters_total)
+                        @elseif($district->voters_count > $district->dpts_count)
                             <span class="text-warning" data-bs-toggle="tooltip"
                                 title="Jumlah pemilih lebih dari total DPT!">
                                 <i class="fas fa-arrow-up"></i>
@@ -77,10 +77,10 @@
                         {{ GeneralHelper::number_format($district->voters_count) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format($district->voters_total) }}
+                        {{ GeneralHelper::number_format($district->dpts_count) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format($district->voters_total > 0 ? ($district->voters_count / $district->voters_total) * 100 : 0, true) }}
+                        {{ GeneralHelper::number_format($district->dpts_count > 0 ? ($district->voters_count / $district->dpts_count) * 100 : 0, true) }}
                     </td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-info text-white position-relative" style="cursor:pointer;"

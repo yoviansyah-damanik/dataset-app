@@ -16,22 +16,22 @@ class DistrictsSeeder extends Seeder
     public function run()
     {
         District::create([
-            'name' => 'Padangsidimpuan Utara'
+            'name' => 'PADANGSIDIMPUAN UTARA'
         ]);
         District::create([
-            'name' => 'Padangsidimpuan Tenggara'
+            'name' => 'PADANGSIDIMPUAN TENGGARA'
         ]);
         District::create([
-            'name' => 'Padangsidimpuan Selatan'
+            'name' => 'PADANGSIDIMPUAN SELATAN'
         ]);
         District::create([
-            'name' => 'Padangsidimpuan Hutaimbaru'
+            'name' => 'PADANGSIDIMPUAN HUTAIMBARU'
         ]);
         District::create([
-            'name' => 'Padangsidimpuan Batunadua'
+            'name' => 'PADANGSIDIMPUAN BATUNADUA'
         ]);
         District::create([
-            'name' => 'Padangsidimpuan Angkola Julu'
+            'name' => 'PADANGSIDIMPUAN ANGKOLA JULU'
         ]);
     }
 }

@@ -20,10 +20,12 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Permission::create(['name' => 'create voter']);
         Permission::create(['name' => 'read voter']);
+        Permission::create(['name' => 'show voter']);
         Permission::create(['name' => 'update voter']);
         Permission::create(['name' => 'delete voter']);
         Permission::create(['name' => 'print voter']);
         Permission::create(['name' => 'migration voter']);
+        Permission::create(['name' => 'transfer voter']);
 
         Permission::create(['name' => 'read dpt']);
 
@@ -82,6 +84,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'Administrator'])
             ->givePermissionTo(
                 'create voter',
+                'show voter',
                 'read voter',
                 'read dpt',
                 'read region',
@@ -99,7 +102,9 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'Administrator Keluarga'])
             ->givePermissionTo(
                 'create voter',
+                'show voter',
                 'read voter',
+                'read dpt',
                 'read region',
                 'read master',
                 'read district',
@@ -115,6 +120,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'Koordinator Kecamatan'])
             ->givePermissionTo(
                 [
+                    'show voter',
                     'read voter',
                     'read region',
                     'read master',
@@ -125,6 +131,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'Koordinator Kelurahan/Desa'])
             ->givePermissionTo(
                 [
+                    'show voter',
                     'read voter',
                     'read region',
                     'read master',
@@ -134,6 +141,16 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Role::create(['name' => 'Koordinator TPS'])
             ->givePermissionTo([
+                'show voter',
+                'read voter',
+                'read region',
+                'read master',
+                'log_activity config'
+            ]);
+
+        Role::create(['name' => 'Koordinator Keluarga'])
+            ->givePermissionTo([
+                'show voter',
                 'read voter',
                 'read region',
                 'read master',
@@ -142,6 +159,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Role::create(['name' => 'Tim Bersinar'])
             ->givePermissionTo([
+                'show voter',
                 'read voter',
                 'read region',
                 'read master',

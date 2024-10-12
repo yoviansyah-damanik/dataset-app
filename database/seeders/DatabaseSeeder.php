@@ -16,12 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(
             [
-                RolesAndPermissionsSeeder::class,
-                DistrictsSeeder::class,
-                VillagesSeeder::class,
-                TpsSeeder::class,
-                UserSeeder::class,
                 ConfigurationSeeder::class,
+                RolesAndPermissionsSeeder::class,
+                // DistrictsSeeder::class,
+                // VillagesSeeder::class,
+                // TpsSeeder::class,
+                RegionSeeder::class,
+                UserSeeder::class,
                 NasionalitySeeder::class,
                 MaritalStatusSeeder::class,
                 ProfessionSeeder::class,

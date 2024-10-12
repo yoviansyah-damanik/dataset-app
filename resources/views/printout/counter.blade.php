@@ -169,13 +169,13 @@
             <td class="text-center" colspan=3>
                 <p class="title_count">Laki-laki</p>
                 <h3 class="count">
-                    {{ GeneralHelper::number_format($data['voters_by_gender'][0]->voters_count) }}
+                    {{ GeneralHelper::number_format($data['voters_by_gender']['Laki-laki']) }}
                 </h3>
             </td>
             <td class="text-center" colspan=3>
                 <p class="title_count">Perempuan</p>
                 <h3 class="count">
-                    {{ GeneralHelper::number_format($data['voters_by_gender'][1]->voters_count) }}
+                    {{ GeneralHelper::number_format($data['voters_by_gender']['Perempuan']) }}
                 </h3>
             </td>
         </tr>

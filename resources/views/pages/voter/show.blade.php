@@ -29,19 +29,23 @@
         </div>
         <div class="card-2">
             <div class="d-block d-lg-flex gap-3">
-                <div class="order-2 row d-lg-block">
-                    <div class="col-6 col-lg-12">
-                        <a href="{{ $voter->ktp_path }}" class="glightbox foto_ktp mb-3">
-                            <img src="{{ $voter->ktp_path }}" alt="Foto KTP {{ $voter->name }}"
-                                style="width:100%; max-width:450px;">
-                        </a>
-                    </div>
-                    <div class="col-6 col-lg-12">
-                        <a href="{{ $voter->kk_path }}" class="glightbox foto_kk order-2">
-                            <img src="{{ $voter->kk_path }}" alt="Foto KK {{ $voter->name }}"
-                                style="width:100%; max-width:450px;">
-                        </a>
-                    </div>
+                <div class="order-2 row d-lg-block" style="min-width: 250px;">
+                    @if ($voter->ktp)
+                        <div class="col-6 col-lg-12">
+                            <a href="{{ $voter->ktp_path }}" class="glightbox foto_ktp mb-3">
+                                <img src="{{ $voter->ktp_path }}" alt="Foto KTP {{ $voter->name }}"
+                                    style="width:100%; max-width:450px;">
+                            </a>
+                        </div>
+                    @endif
+                    @if ($voter->kk)
+                        <div class="col-6 col-lg-12">
+                            <a href="{{ $voter->kk_path }}" class="glightbox foto_kk order-2">
+                                <img src="{{ $voter->kk_path }}" alt="Foto KK {{ $voter->name }}"
+                                    style="width:100%; max-width:450px;">
+                            </a>
+                        </div>
+                    @endif
                     <div class="col-12 text-center">
                         @haspermission('update voter')
                             <a type="button" href="{{ route('voters.edit', $voter->id) }}" data-bs-toggle="tooltip"
@@ -76,11 +80,11 @@
                     </tr>
                     <tr>
                         <th>No. Telp.</th>
-                        <td>{{ $voter?->phone_number ?? '-' }}</td>
+                        <td>{{ $voter?->phone_number ?: '-' }}</td>
                     </tr>
                     <tr>
                         <th>Alamat</th>
-                        <td>{{ $voter?->address ?? '-' }}</td>
+                        <td>{{ $voter?->address ?: '-' }}</td>
                     </tr>
                     <tr>
                         <td></td>

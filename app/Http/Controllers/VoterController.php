@@ -20,6 +20,9 @@ class VoterController extends Controller
 
     public function show(Voter $voter)
     {
+        if (!auth()->user()->hasPermissionTo('show voter ' . $voter->id)) {
+            abort(401);
+        }
         return view('pages.voter.show', ['voter' => $voter]);
     }
 
@@ -36,6 +39,11 @@ class VoterController extends Controller
     public function migration()
     {
         return view('pages.voter.migration');
+    }
+
+    public function transfer()
+    {
+        return view('pages.voter.transfer');
     }
 
     public function delete(Voter $voter)

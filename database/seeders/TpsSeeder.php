@@ -401,7 +401,6 @@ class TpsSeeder extends Seeder
             ['district' => 'PADANGSIDIMPUAN UTARA', 'village' => 'WEK IV', 'name' => 'TPS 3', 'total' => 299],
             ['district' => 'PADANGSIDIMPUAN UTARA', 'village' => 'WEK IV', 'name' => 'TPS 4', 'total' => 449],
             ['district' => 'PADANGSIDIMPUAN UTARA', 'village' => 'WEK IV', 'name' => 'TPS 5', 'total' => 393],
-
         ];
 
         foreach ($tpses as $tps) {

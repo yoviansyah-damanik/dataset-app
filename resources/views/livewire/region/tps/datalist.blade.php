@@ -93,8 +93,8 @@
                         {{ GeneralHelper::number_format($tps->voters_count) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format($tps->dpts_count) }}<br />
-                        {{ GeneralHelper::number_format($tps->voters_total) }}
+                        {{ GeneralHelper::number_format($tps->dpts_count) }}
+                        {{-- {{ GeneralHelper::number_format($tps->voters_total) }} --}}
                     </td>
                     <td class="text-center">
                         {{ GeneralHelper::number_format($tps->voters_total > 0 ? ($tps->voters_count / $tps->voters_total) * 100 : 0, true) }}
@@ -132,7 +132,7 @@
                 </tr>
             @endforelse
         </tbody>
-        {{-- <tfoot class="text-center">
+        <tfoot class="text-center">
             <th colspan=4>Jumlah Keseluruhan</th>
             <th>
                 @if ($tpses_voters_count < $tpses_voters_total)
@@ -156,7 +156,7 @@
             <th>
                 {{ GeneralHelper::number_format($tpses_voters_total > 0 ? ($tpses_voters_count / $tpses_voters_total) * 100 : 0, true) }}
             </th>
-        </tfoot> --}}
+        </tfoot>
     </table>
 
     {{ $tpses->onEachSide(2)->links() }}

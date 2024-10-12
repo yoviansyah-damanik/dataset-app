@@ -67,12 +67,12 @@
                     <td>{{ $village->district_name }}</td>
                     <td class="text-center">{{ $village->tpses_count }} TPS</td>
                     <td class="text-center">
-                        @if ($village->voters_count < $village->voters_total)
+                        @if ($village->voters_count < $village->dpts_count)
                             <span class="text-danger" data-bs-toggle="tooltip"
                                 title="Jumlah pemilih kurang dari total DPT!">
                                 <i class="fas fa-arrow-down"></i>
                             </span>
-                        @elseif($village->voters_count > $village->voters_total)
+                        @elseif($village->voters_count > $village->dpts_count)
                             <span class="text-warning" data-bs-toggle="tooltip"
                                 title="Jumlah pemilih lebih dari total DPT!">
                                 <i class="fas fa-arrow-up"></i>
@@ -86,10 +86,10 @@
                         {{ GeneralHelper::number_format($village->voters_count) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format($village->voters_total) }}
+                        {{ GeneralHelper::number_format($village->dpts_count) }}
                     </td>
                     <td class="text-center">
-                        {{ GeneralHelper::number_format($village->voters_total > 0 ? ($village->voters_count / $village->voters_total) * 100 : 0, true) }}
+                        {{ GeneralHelper::number_format($village->dpts_count > 0 ? ($village->voters_count / $village->dpts_count) * 100 : 0, true) }}
                     </td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-info text-white position-relative" style="cursor:pointer;"

@@ -40,31 +40,31 @@ class Datalist extends Component
             ->join('villages as vl', 'vl.id', '=', 't.village_id')
             ->join('districts as d', 'vl.district_id', '=', 'd.id')
             ->where('t.name', 'like', "%$this->s%")
-            ->where('dpts_count', '!=', 'voters_total')
+            // ->where('dpts_count', '!=', 'voters_total')
             ->when(
                 $this->district,
                 fn($q) =>
                 $q->where('district_id', $this->district)
                     ->when($this->village, fn($q) => $q->where('village_id', $this->village))
-            )
-            ->get();
+            );
+        // ->get();
 
         // $tpses = Tps::with('district', 'village')
-        //     ->withCount('voters', 'dpts')
-        //     ->where('voters_count', '!=', 'dpts_count');
+        // ->withCount('voters', 'dpts');
+        // ->where('voters_count', '!=', 'dpts_count');
 
-        // $get_data = $tpses->get();
-        // $tpses_voters_count = $tpses->sum('voters_count');
-        // $tpses_voters_total = $tpses->sum('dpts_total');
+        $get_data = $tpses->get();
+        $tpses_voters_count = $get_data->sum('voters_count');
+        $tpses_voters_total = $get_data->sum('dpts_count');
 
-        // $tpses = $tpses->paginate($this->limit, ['*'], 'tpsPage');
+        $tpses = $tpses->paginate($this->limit, ['*'], 'tpsPage');
 
         return view('livewire.region.tps.datalist', compact(
             'tpses',
             'districts',
             'villages',
-            // 'tpses_voters_count',
-            // 'tpses_voters_total',
+            'tpses_voters_count',
+            'tpses_voters_total',
         ));
     }
 

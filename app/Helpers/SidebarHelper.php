@@ -63,6 +63,12 @@ class SidebarHelper
                     'icon' => 'fas fa-person-walking-dashed-line-arrow-right',
                     'permission' => $permissions->some('migration voter')
                 ],
+                [
+                    'title' => 'Transfer',
+                    'route' => 'voters.transfer',
+                    'icon' => 'fas fa-person-walking-dashed-line-arrow-right',
+                    'permission' => $permissions->some('transfer voter')
+                ],
             ]
         ]);
 

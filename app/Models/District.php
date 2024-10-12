@@ -41,4 +41,9 @@ class District extends Model
         return $this->hasMany(User::class)
             ->role('Koordinator Kecamatan');
     }
+
+    public function dpts(): HasMany
+    {
+        return $this->hasMany(Dpt::class);
+    }
 }

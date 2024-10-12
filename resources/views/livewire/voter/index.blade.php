@@ -73,7 +73,7 @@
                             <div class="input-group-text">
                                 <i class="fas fa-filter"></i>
                             </div>
-                            <select class="form-select" wire:model='district' @disabled(auth()->user()->role_name != 'Superadmin')>
+                            <select class="form-select" wire:model='district' @disabled(!in_array(auth()->user()->role_name, ['Superadmin', 'Administrator Keluarga']))>
                                 <option value="">--Tidak ada kecamatan dipilih--</option>
                                 @foreach ($districts as $district)
                                     <option value="{{ $district->id }}">{{ $district->name }}</option>
@@ -88,7 +88,13 @@
                             <div class="input-group-text">
                                 <i class="fas fa-filter"></i>
                             </div>
-                            <select class="form-select" wire:model='village' @disabled(!in_array(auth()->user()->role_name, ['Superadmin', 'Koordinator Kecamatan', 'Administrator']))>
+                            <select class="form-select" wire:model='village' @disabled(
+                                !in_array(auth()->user()->role_name, [
+                                    'Superadmin',
+                                    'Koordinator Kecamatan',
+                                    'Administrator',
+                                    'Administrator Keluarga',
+                                ]))>
                                 <option value="">--Tidak ada kelurahan/desa dipilih--</option>
                                 @foreach ($villages as $village)
                                     <option value="{{ $village->id }}">{{ $village->name }}</option>
@@ -109,6 +115,7 @@
                                     'Koordinator Kecamatan',
                                     'Koordinator Kelurahan/Desa',
                                     'Administrator',
+                                    'Administrator Keluarga',
                                 ]))>
                                 <option value="">--Tidak ada TPS dipilih--</option>
                                 @foreach ($tpses as $tps)
@@ -234,7 +241,7 @@
                                         No. Telp.
                                     </div>
                                     <div style="flex: 1 1 0%">
-                                        {{ $voter->phone_number }}
+                                        {{ $voter->phone_number ?: '-' }}
                                     </div>
                                 </div>
                                 <div class="d-flex gap-1">
@@ -242,7 +249,7 @@
                                         Alamat
                                     </div>
                                     <div style="flex: 1 1 0%">
-                                        {{ $voter->address }}
+                                        {{ $voter->address ?: '-' }}
                                     </div>
                                 </div>
                                 <div class="d-flex gap-1">
@@ -279,20 +286,44 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
-                                    <div class="fw-bold voter-table-width">
+                                @if ($voter->family_coor_id)
+                                    <div class="badge bg-success">
+                                        Koordinator
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <div class="fw-bold voter-table-width">
+                                            Koordinator Keluarga
+                                        </div>
+                                        <div style="flex: 1 1 0%">
+                                            @if (in_array(auth()->user()->role_name, ['Superadmin']))
+                                                <a
+                                                    href="{{ route('users', ['s' => $voter->family_coor_id->fullname]) }}">
+                                                    {{ $voter->family_coor_id->fullname }}
+                                                </a>
+                                            @else
+                                                {{ $voter->created_by->fullname }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="badge bg-danger">
                                         Tim Bersinar
                                     </div>
-                                    <div style="flex: 1 1 0%">
-                                        @if (in_array(auth()->user()->role_name, ['Superadmin']))
-                                            <a href="{{ route('users', ['s' => $voter->team_by->fullname]) }}">
-                                                {{ $voter->team_by->fullname }}
-                                            </a>
-                                        @else
-                                            {{ $voter->created_by->fullname }}
-                                        @endif
+                                    <div class="d-flex gap-1">
+                                        <div class="fw-bold voter-table-width">
+                                            Koordinator
+                                        </div>
+                                        <div style="flex: 1 1 0%">
+                                            @if (in_array(auth()->user()->role_name, ['Superadmin']))
+                                                <a href="{{ route('users', ['s' => $voter->team_by->fullname]) }}">
+                                                    {{ $voter->team_by->fullname }}
+                                                </a>
+                                            @else
+                                                {{ $voter->created_by->fullname }}
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="d-flex gap-1">
                                     <div class="fw-bold voter-table-width">
                                         Kecamatan
@@ -322,9 +353,11 @@
                                         Diperbaharui pada
                                     </div>
                                     <div style="flex: 1 1 0%">
-                                        {{ $voter->updated_at->format('d M Y H:i:s') }}
+                                        {{ $voter->updated_at->translatedFormat('d M Y H:i:s') }}
                                     </div>
                                 </div>
+
+
                             </td>
                             <td class="text-center">
                                 @if ($voter->ktp)

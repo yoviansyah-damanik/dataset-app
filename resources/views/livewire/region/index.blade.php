@@ -99,12 +99,12 @@
                             </td>
                             <td class="text-center"
                                 rowspan={{ $district->villages->count() > 0 ? $district->villages->count() + $district->tpses->count() + 1 : 2 }}>
-                                @if ($district->voters->count() < $district->tpses->sum('voters_total'))
+                                @if ($district->voters_count < $district->tpses->sum('dpts_count'))
                                     <span class="text-danger" data-bs-toggle="tooltip"
                                         title="Jumlah pemilih kurang dari total DPT!">
                                         <i class="fas fa-arrow-down"></i>
                                     </span>
-                                @elseif($district->voters->count() > $district->tpses->sum('voters_total'))
+                                @elseif($district->voters_count > $district->tpses->sum('dpts_count'))
                                     <span class="text-warning" data-bs-toggle="tooltip"
                                         title="Jumlah pemilih lebih dari total DPT!">
                                         <i class="fas fa-arrow-up"></i>
@@ -115,8 +115,8 @@
                                         <i class="fas fa-check"></i>
                                     </span>
                                 @endif
-                                {{ GeneralHelper::number_format($district->voters->count()) }}
-                                {{-- @if ($district->voters->count() == $district->village_voters->count())
+                                {{ GeneralHelper::number_format($district->voters_count) }}
+                                {{-- @if ($district->voters_count == $district->village_voters->count())
                                     <span class="text-success" data-bs-toggle="tooltip"
                                         title="Jumlah pemilih di seluruh Kelurahan/Desa sesuai.">
                                         <i class="fas fa-check"></i>
@@ -130,11 +130,11 @@
                             </td>
                             <td class="text-center"
                                 rowspan={{ $district->villages->count() > 0 ? $district->villages->count() + $district->tpses->count() + 1 : 2 }}>
-                                {{ GeneralHelper::number_format($district->tpses->sum('voters_total')) }}
+                                {{ GeneralHelper::number_format($district->tpses->sum('dpts_count')) }}
                             </td>
                             <td class="text-center"
                                 rowspan={{ $district->villages->count() > 0 ? $district->villages->count() + $district->tpses->count() + 1 : 2 }}>
-                                {{ GeneralHelper::number_format(($district->voters->count() / $district->tpses->sum('voters_total')) * 100, true) }}
+                                {{ GeneralHelper::number_format($district->dpts_count > 0 ? ($district->voters_count / $district->dpts_count) * 100 : 0, true) }}
                             </td>
                         </tr>
                         @if ($district->villages->count() > 0)
@@ -165,12 +165,12 @@
                                             </span>
                                         </td>
                                         <td class="text-center" rowspan={{ $village->tpses->count() + 1 }}>
-                                            @if ($village->voters->count() < $village->voters_total)
+                                            @if ($village->voters_count < $village->dpts_count)
                                                 <span class="text-danger" data-bs-toggle="tooltip"
                                                     title="Jumlah pemilih kurang dari total DPT!">
                                                     <i class="fas fa-arrow-down"></i>
                                                 </span>
-                                            @elseif($village->voters->count() > $village->voters_total)
+                                            @elseif($village->voters_count > $village->dpts_count)
                                                 <span class="text-warning" data-bs-toggle="tooltip"
                                                     title="Jumlah pemilih lebih dari total DPT!">
                                                     <i class="fas fa-arrow-up"></i>
@@ -181,8 +181,8 @@
                                                     <i class="fas fa-check"></i>
                                                 </span>
                                             @endif
-                                            {{ GeneralHelper::number_format($village->voters->count()) }}
-                                            {{-- @if ($village->voters->count() == $village->tps_voters->count())
+                                            {{ GeneralHelper::number_format($village->voters_count) }}
+                                            {{-- @if ($village->voters_count == $village->tps_voters->count())
                                                 <span class="text-success" data-bs-toggle="tooltip"
                                                     title="Jumlah pemilih di seluruh TPS sesuai.">
                                                     <i class="fas fa-check"></i>
@@ -195,10 +195,10 @@
                                             @endif --}}
                                         </td>
                                         <td class="text-center" rowspan={{ $village->tpses->count() + 1 }}>
-                                            {{ GeneralHelper::number_format($village->voters_total) }}
+                                            {{ GeneralHelper::number_format($village->dpts_count) }}
                                         </td>
                                         <td class="text-center" rowspan={{ $village->tpses->count() + 1 }}>
-                                            {{ GeneralHelper::number_format(($village->voters->count() / $village->voters_total) * 100, true) }}
+                                            {{ GeneralHelper::number_format($village->dpts_count > 0 ? ($village->voters_count / $village->dpts_count) * 100 : 0, true) }}
                                         </td>
                                     </tr>
                                     @foreach ($village->tpses as $tps)
@@ -225,12 +225,12 @@
                                                 </span>
                                             </td>
                                             <td class="text-center">
-                                                @if ($tps->voters->count() < $tps->voters_total)
+                                                @if ($tps->voters_count < $tps->dpts_count)
                                                     <span class="text-danger" data-bs-toggle="tooltip"
                                                         title="Jumlah pemilih kurang dari total DPT!">
                                                         <i class="fas fa-arrow-down"></i>
                                                     </span>
-                                                @elseif($tps->voters->count() > $tps->voters_total)
+                                                @elseif($tps->voters_count > $tps->dpts_count)
                                                     <span class="text-warning" data-bs-toggle="tooltip"
                                                         title="Jumlah pemilih lebih dari total DPT!">
                                                         <i class="fas fa-arrow-up"></i>
@@ -241,13 +241,13 @@
                                                         <i class="fas fa-check"></i>
                                                     </span>
                                                 @endif
-                                                {{ GeneralHelper::number_format($tps->voters->count()) }}
+                                                {{ GeneralHelper::number_format($tps->voters_count) }}
                                             </td>
                                             <td class="text-center">
-                                                {{ GeneralHelper::number_format($tps->voters_total) }}
+                                                {{ GeneralHelper::number_format($tps->dpts_count) }}
                                             </td>
                                             <td class="text-center">
-                                                {{ GeneralHelper::number_format(($tps->voters->count() / $tps->voters_total) * 100, true) }}
+                                                {{ GeneralHelper::number_format(($tps->voters_count / $tps->dpts_count) * 100, true) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -272,8 +272,8 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            {{ $village->voters->count() }}
-                                            {{-- @if ($village->voters->count() == $village->tps_voters->count())
+                                            {{ $village->voters_count }}
+                                            {{-- @if ($village->voters_count == $village->tps_voters->count())
                                                 <span class="text-success" data-bs-toggle="tooltip"
                                                     title="Jumlah pemilih di seluruh TPS sesuai.">
                                                     <i class="fas fa-check"></i>
@@ -325,7 +325,7 @@
                         {{ GeneralHelper::number_format($districts_voters_total) }}
                     </th>
                     <th>
-                        {{ GeneralHelper::number_format(($districts_voters_count / $districts_voters_total) * 100, true) }}
+                        {{ GeneralHelper::number_format($districts_voters_total > 0 ? ($districts_voters_count / $districts_voters_total) * 100 : 0, true) }}
                     </th>
                 </tfoot>
             </table>

@@ -22,7 +22,7 @@ class UserFactory extends Factory
         return [
             'username' => Str::random(16),
             'fullname' => $this->faker->name,
-            'email' => $this->faker->email,
+            // 'email' => $this->faker->email,
             'password' => Hash::make('password')
         ];
     }

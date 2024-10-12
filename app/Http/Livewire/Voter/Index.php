@@ -116,6 +116,7 @@ class Index extends Component
             ->when($this->district, fn($q) => $q->where('district_id', $this->district))
             ->when($this->village, fn($q) => $q->where('village_id', $this->village))
             ->when($this->tps, fn($q) => $q->where('tps_id', $this->tps))
+            ->when(in_array(auth()->user()->role_name, ['Administrator Keluarga', 'Koordinator Keluarga']), fn($q) => $q->where('family_coor_id', auth()->user()->id))
             ->paginate($this->per_page);
 
         if (!$voters)
@@ -151,9 +152,7 @@ class Index extends Component
             $this->tps = null;
         }
 
-        if ($attribute == 'search') {
-            $this->resetPage();
-        }
+        $this->resetPage();
     }
 
     public function destroy($id)
