@@ -116,7 +116,7 @@ Route::middleware('auth')
                 } catch (\Exception $e) {
                     ddd($e->getMessage(), $data_added->last());
                 }
-            })->middleware('role:superadmin');
+            })->middleware('role:Superadmin');
 
             Route::get('/', [DatasetController::class, 'index'])->name('dashboard');
 
