@@ -326,7 +326,7 @@ class Create extends Component
 
             History::makeHistory('Membuat Pemilih dengan ID: ' . $new_voter->id, $new_voter, 'create', ref_id: $new_voter->id);
 
-            $permission = Permission::create(['name' => 'show voter ' . $new_voter->id]);
+            // $permission = Permission::create(['name' => 'show voter ' . $new_voter->id]);
 
             // if (auth()->user()->role_name == 'Administrator Keluarga') {
             //     $ids = [auth()->user()->id, $this->family_coor->id];
