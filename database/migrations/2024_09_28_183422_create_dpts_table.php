@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('address');
             $table->string('rt');
             $table->string('rw');
-            // $table->string('tps');
-            // $table->string('village');
-            // $table->string('district');
+            $table->string('tps');
+            $table->string('village');
+            $table->string('district');
             $table->foreignId('district_id')
                 ->reference('id')
                 ->on('districts')

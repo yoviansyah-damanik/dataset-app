@@ -21,73 +21,64 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'superadmin',
             'fullname' => 'Superadmin',
-            // 'email' => 'superadmin@gmail.com',
             'password' => Hash::make('password')
         ])->assignRole('Superadmin');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_utara',
-        //     'fullname' => 'Admin Utara',
-        //     // 'email' => 'admin_utara@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_utara',
+            'fullname' => 'Admin Utara',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
+        ])->assignRole('Administrator');
 
 
-        // \App\Models\User::create([
-        //     'username' => 'koordinator_kecamatan_utara',
-        //     'fullname' => 'Koordinator Utara',
-        //     // 'email' => 'koor_utara@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
-        // ])->assignRole('Koordinator Kecamatan');
+        \App\Models\User::create([
+            'username' => 'koordinator_kecamatan_utara',
+            'fullname' => 'Koordinator Utara',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Utara')->first()->id
+        ])->assignRole('Koordinator Kecamatan');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_selatan',
-        //     'fullname' => 'Admin Selatan',
-        //     // 'email' => 'admin_selatan@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Selatan')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_selatan',
+            'fullname' => 'Admin Selatan',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Selatan')->first()->id
+        ])->assignRole('Administrator');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_tenggara',
-        //     'fullname' => 'Admin Tenggara',
-        //     // 'email' => 'admin_tenggara@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Tenggara')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_tenggara',
+            'fullname' => 'Admin Tenggara',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Tenggara')->first()->id
+        ])->assignRole('Administrator');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_hutaimbaru',
-        //     'fullname' => 'Admin Hutaimbaru',
-        //     // 'email' => 'admin_hutaimbaru@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Hutaimbaru')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_hutaimbaru',
+            'fullname' => 'Admin Hutaimbaru',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Hutaimbaru')->first()->id
+        ])->assignRole('Administrator');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_batunadua',
-        //     'fullname' => 'Admin Batunadua',
-        //     // 'email' => 'admin_batunadua@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Batunadua')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_batunadua',
+            'fullname' => 'Admin Batunadua',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Batunadua')->first()->id
+        ])->assignRole('Administrator');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_psp_angkola_judul',
-        //     'fullname' => 'Admin Angkola Judul',
-        //     // 'email' => 'admin_angkola_judul@gmail.com',
-        //     'password' => Hash::make('password'),
-        //     'district_id' => District::where('name', 'Padangsidimpuan Angkola Julu')->first()->id
-        // ])->assignRole('Administrator');
+        \App\Models\User::create([
+            'username' => 'admin_psp_angkola_judul',
+            'fullname' => 'Admin Angkola Judul',
+            'password' => Hash::make('password'),
+            'district_id' => District::where('name', 'Padangsidimpuan Angkola Julu')->first()->id
+        ])->assignRole('Administrator');
 
-        // \App\Models\User::create([
-        //     'username' => 'admin_keluarga',
-        //     'fullname' => 'Admin Keluarga',
-        //     // 'email' => 'admin_keluarga@gmail.com',
-        //     'password' => Hash::make('password'),
-        // ])->assignRole('Administrator Keluarga');
+        \App\Models\User::create([
+            'username' => 'admin_keluarga',
+            'fullname' => 'Admin Keluarga',
+            'password' => Hash::make('password'),
+        ])->assignRole('Administrator Keluarga');
 
         // // User::factory()
         // //     ->count(15)
