@@ -451,7 +451,7 @@
                                 <select id="tps" class="form-select @error('tps') is-invalid @enderror"
                                     wire:model="tps">
                                     @foreach ($tpses as $tps)
-                                        <option value="{{ $tps->id }}">{{ $village->name }}</option>
+                                        <option value="{{ $tps->id }}">{{ $tps->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
