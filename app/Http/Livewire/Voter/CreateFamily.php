@@ -108,21 +108,21 @@ class CreateFamily extends Component
     public function set_districts()
     {
         $this->districts = District::get();
-        $this->kecamatan = $this->districts->first()->id;
+        $this->kecamatan = $this->districts->where('id', $this->kecamatan)->first()->id;
         $this->set_villages();
     }
 
     public function set_villages()
     {
         $this->villages = Village::where('district_id', $this->kecamatan)->get();
-        $this->kelurahan = $this->villages->first()->id;
+        $this->kelurahan = $this->villages->where('id', $this->kelurahan)->first()->id;
         $this->set_tpses();
     }
 
     public function set_tpses()
     {
         $this->tpses = Tps::where('village_id', $this->kelurahan)->get();
-        $this->tps = $this->tpses->first()->id;
+        $this->tps = $this->tpses->where('id', $this->tps)->first()->id;
     }
 
     public function next_step()
@@ -388,6 +388,10 @@ class CreateFamily extends Component
     public function set_dpt(Dpt $dpt)
     {
         $this->dpt = $dpt;
+
+        $this->kecamatan = $dpt->district_id;
+        $this->kelurahan = $dpt->village_id;
+        $this->tps = $dpt->tps_id;
     }
 
     public function set_family_coor(User $user)
