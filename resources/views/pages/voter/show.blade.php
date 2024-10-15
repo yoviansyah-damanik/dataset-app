@@ -155,7 +155,7 @@
                     </tr>
                     <tr>
                         <th>TPS</th>
-                        <td>TPS {{ $voter->dpt->tps->name }}
+                        <td>{{ $voter->dpt->tps->name }}
                         </td>
                     </tr>
                     <tr>

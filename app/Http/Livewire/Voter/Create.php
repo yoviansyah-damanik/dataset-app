@@ -131,6 +131,8 @@ class Create extends Component
                 ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(20)
                 ->get();
+
+            dd($this->dpt);
         }
 
         if ($this->step == 3) {

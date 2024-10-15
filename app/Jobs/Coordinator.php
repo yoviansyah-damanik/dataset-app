@@ -77,12 +77,15 @@ class Coordinator implements ShouldQueue
                     if (in_array($data[2], ['Koordinator Kelurahan/Desa', 'Koordinator TPS']))
                         $username = "coor_" . $username;
 
+                    $district = \App\Models\District::where('name', "PADANGSIDIMPUAN $data[3]")->first()->id;
+                    $village = \App\Models\Village::where('district_id', $district)->where('name', $data[4])->first()->id;
+                    $tps = \App\Models\Tps::where('village_id', $district)->where('name', "TPS $data[5]")->first()->id;
                     $payload = [
                         'username' => $username,
                         'fullname' => $data[1],
-                        'district_id' => \App\Models\District::where('name', "PADANGSIDIMPUAN $data[3]")->first()->id,
-                        'village_id' => \App\Models\Village::where('name', $data[4])->first()->id,
-                        'tps_id' => \App\Models\Tps::where('name', "TPS $data[5]")->first()->id,
+                        'district_id' => $district,
+                        'village_id' => $village,
+                        'tps_id' => $tps,
                         'password' => bcrypt($username)
                     ];
 
