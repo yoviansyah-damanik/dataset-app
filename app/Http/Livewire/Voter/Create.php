@@ -168,6 +168,7 @@ class Create extends Component
 
         if ($this->step == 6) {
             $this->reset('data');
+            $this->dispatchBrowserEvent('setDateInput');
         }
 
         // $this->dispatchBrowserEvent('reloadDistrict', ['is_empty' => false]);
@@ -247,7 +248,7 @@ class Create extends Component
             'nama' => 'required|string|max:255',
             'alamat' => 'nullable|string|max:255',
             'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date',
+            'tanggal_lahir' => 'required|date_format:d/m/Y',
             'jenis_kelamin' => [
                 'required',
                 Rule::in(["Laki-laki", "Perempuan"])
@@ -304,7 +305,7 @@ class Create extends Component
             $new_voter->nik = $this->nik;
             $new_voter->address = $this->alamat ?? null;
             $new_voter->place_of_birth = $this->tempat_lahir;
-            $new_voter->date_of_birth = $this->tanggal_lahir;
+            $new_voter->date_of_birth = \Carbon\Carbon::createFromFormat('d/m/Y', $this->tanggal_lahir)->format('Y-m-d');
             $new_voter->gender = $this->jenis_kelamin;
             $new_voter->rt = sprintf('%02d', $this->rt) ?? 0;
             $new_voter->rw = sprintf('%02d', $this->rw) ?? 0;

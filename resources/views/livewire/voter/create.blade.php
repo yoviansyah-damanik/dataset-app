@@ -912,7 +912,47 @@
         </div>
     @endif
 </div>
+@push('scripts')
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setDateInput()
+        })
 
+        $.datepicker.setDefaults({
+            closeText: "Tutup",
+            prevText: "Mundur",
+            nextText: "Maju",
+            currentText: "Hari ini",
+            monthNames: ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "Nopember", "Desember"
+            ],
+            monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+                "Jul", "Agus", "Sep", "Okt", "Nop", "Des"
+            ],
+            dayNames: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+            dayNamesShort: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+            dayNamesMin: ["Mg", "Sn", "Sl", "Rb", "Km", "Jm", "Sb"],
+            weekHeader: "Mg",
+            dateFormat: "dd/mm/yy",
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ""
+        });
+
+        function setDateInput() {
+            $("input#date").datepicker({
+                "dateFormat": "dd/mm/yy"
+            });
+        }
+
+        $(window).on('setDateInput', function(e) {
+            setDateInput()
+        })
+    </script>
+@endpush
 {{-- @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
