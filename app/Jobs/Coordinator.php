@@ -79,7 +79,7 @@ class Coordinator implements ShouldQueue
 
                     $district = \App\Models\District::where('name', "PADANGSIDIMPUAN $data[3]")->first()->id;
                     $village = \App\Models\Village::where('district_id', $district)->where('name', $data[4])->first()->id;
-                    $tps = \App\Models\Tps::where('village_id', $district)->where('name', "TPS $data[5]")->first()->id;
+                    $tps = \App\Models\Tps::where('village_id', $village)->where('name', "TPS $data[5]")->first()->id;
                     $payload = [
                         'username' => $username,
                         'fullname' => $data[1],
