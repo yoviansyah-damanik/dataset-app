@@ -82,7 +82,7 @@ class CreateFamily extends Component
             $this->data = User::with('voters_by_family', 'district', 'village', 'tps', 'roles')
                 ->withCount('voters_by_family')
                 ->role('Koordinator Keluarga')
-                ->whereEncrypted('fullname', 'like', "%$this->search%")
+                ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(10)
                 ->get();
         }

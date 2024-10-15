@@ -128,7 +128,7 @@ class Create extends Component
                 ->where('district_id', $this->dpt->district_id)
                 ->where('village_id', $this->dpt->village_id)
                 ->where('tps_id', $this->dpt->tps_id)
-                ->whereEncrypted('fullname', 'like', "%$this->search%")
+                ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(20)
                 ->get();
         }
@@ -138,7 +138,7 @@ class Create extends Component
                 ->withCount('voters_by_team')
                 ->role('Koordinator Kecamatan')
                 ->where('district_id', $this->kecamatan)
-                ->whereEncrypted('fullname', 'like', "%$this->search%")
+                ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(20)
                 ->get();
         }
@@ -149,7 +149,7 @@ class Create extends Component
                 ->role('Koordinator Kelurahan/Desa')
                 ->where('district_id', $this->kecamatan)
                 ->where('village_id', $this->kelurahan)
-                ->whereEncrypted('fullname', 'like', "%$this->search%")
+                ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(20)
                 ->get();
         }
@@ -161,7 +161,7 @@ class Create extends Component
                 ->where('district_id', $this->kecamatan)
                 ->where('village_id', $this->kelurahan)
                 ->where('tps_id', $this->tps)
-                ->whereEncrypted('fullname', 'like', "%$this->search%")
+                ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(20)
                 ->get();
         }
