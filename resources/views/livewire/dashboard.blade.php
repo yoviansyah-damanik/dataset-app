@@ -116,7 +116,7 @@
                             Total Pengguna
                         </div>
                         <div class="box-count">
-                            {{ $users_total->count() }}
+                            {{ $users_total }}
                         </div>
                     </div>
                     <a class="stretched-link" href="{{ route('users') }}"></a>
@@ -248,16 +248,16 @@
                         'box',
                         'box-third',
                         'box-secondary' =>
-                            ($voters_district->voters_total
-                                ? ($voters_district->voters_count /
-                                        $voters_district->voters_total) *
+                            ($voters_district['voters_total']
+                                ? ($voters_district['voters_count'] /
+                                        $voters_district['voters_total']) *
                                     100
                                 : 0) < 50,
                     ])>
                         <div class="box-icon">
-                            @if ($voters_district->voters_count > $voters_district->voters_total)
+                            @if ($voters_district['voters_count'] > $voters_district['voters_total'])
                                 <i class="fas fa-arrow-up"></i>
-                            @elseif($voters_district->voters_count < $voters_district->voters_total)
+                            @elseif($voters_district['voters_count'] < $voters_district['voters_total'])
                                 <i class="fas fa-arrow-down"></i>
                             @else
                                 <i class="fas fa-equals"></i>
@@ -265,23 +265,23 @@
                         </div>
                         <div class="box-body">
                             <div class="box-title">
-                                {{ $voters_district->name }}
+                                {{ $voters_district['label'] }}
                             </div>
                             <div class="box-count">
-                                {{ GeneralHelper::number_format($voters_district->voters_count) }}
+                                {{ GeneralHelper::number_format($voters_district['voters_count']) }}
                             </div>
                             <div class="box-sub-count">
-                                {{ GeneralHelper::number_format($voters_district->voters_total) }} DPT
+                                {{ GeneralHelper::number_format($voters_district['voters_total']) }} DPT
                                 <div @class([
                                     'text-success',
                                     'text-danger' =>
-                                        ($voters_district->voters_total
-                                            ? ($voters_district->voters_count /
-                                                    $voters_district->voters_total) *
+                                        ($voters_district['voters_total']
+                                            ? ($voters_district['voters_count'] /
+                                                    $voters_district['voters_total']) *
                                                 100
                                             : 0) < 50,
                                 ])>
-                                    {{ GeneralHelper::number_format($voters_district->voters_total ? ($voters_district->voters_count / $voters_district->voters_total) * 100 : 0, true) }}%
+                                    {{ GeneralHelper::number_format($voters_district['voters_total'] ? ($voters_district['voters_count'] / $voters_district['voters_total']) * 100 : 0, true) }}%
                                 </div>
                             </div>
                         </div>
@@ -304,15 +304,16 @@
                         'box',
                         'box-third',
                         'box-secondary' =>
-                            ($voters_village->voters_total
-                                ? ($voters_village->voters_count / $voters_village->voters_total) *
+                            ($voters_village['voters_total']
+                                ? ($voters_village['voters_count'] /
+                                        $voters_village['voters_total']) *
                                     100
                                 : 0) < 50,
                     ])>
                         <div class="box-icon">
-                            @if ($voters_village->voters_count > $voters_village->voters_total)
+                            @if ($voters_village['voters_count'] > $voters_village['voters_total'])
                                 <i class="fas fa-arrow-up"></i>
-                            @elseif($voters_village->voters_count < $voters_village->voters_total)
+                            @elseif($voters_village['voters_count'] < $voters_village['voters_total'])
                                 <i class="fas fa-arrow-down"></i>
                             @else
                                 <i class="fas fa-equals"></i>
@@ -320,22 +321,75 @@
                         </div>
                         <div class="box-body">
                             <div class="box-title">
-                                {{ $voters_village->district_name . ' / ' . $voters_village->name }}
+                                {{ $voters_village['district_name'] . ' / ' . $voters_village['label'] }}
                             </div>
                             <div class="box-count">
-                                {{ GeneralHelper::number_format($voters_village->voters_count) }}
+                                {{ GeneralHelper::number_format($voters_village['voters_count']) }}
                             </div>
                             <div class="box-sub-count">
-                                {{ GeneralHelper::number_format($voters_village->voters_total) }} DPT
+                                {{ GeneralHelper::number_format($voters_village['voters_total']) }} DPT
                                 <div @class([
                                     'text-success',
                                     'text-danger' =>
-                                        ($voters_village->voters_total
-                                            ? ($voters_village->voters_count / $voters_village->voters_total) *
+                                        ($voters_village['voters_total']
+                                            ? ($voters_village['voters_count'] /
+                                                    $voters_village['voters_total']) *
                                                 100
                                             : 0) < 50,
                                 ])>
-                                    {{ GeneralHelper::number_format($voters_village->voters_total ? ($voters_village->voters_count / $voters_village->voters_total) * 100 : 0, true) }}%
+                                    {{ GeneralHelper::number_format($voters_village['voters_total'] ? ($voters_village['voters_count'] / $voters_village['voters_total']) * 100 : 0, true) }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        {{-- TPS Tertinggi --}}
+        <div class="row">
+            <div class="col-12 my-3">
+                <span class="row-title">
+                    <span>
+                        TPS Dengan Pemilih Tertinggi
+                    </span>
+                </span>
+            </div>
+            @foreach ($most_voters_tps as $voters_tps)
+                <div class="col-md-4">
+                    <div @class([
+                        'box',
+                        'box-third',
+                        'box-secondary' =>
+                            ($voters_tps['voters_total']
+                                ? ($voters_tps['voters_count'] / $voters_tps['voters_total']) * 100
+                                : 0) < 50,
+                    ])>
+                        <div class="box-icon">
+                            @if ($voters_tps['voters_count'] > $voters_tps['voters_total'])
+                                <i class="fas fa-arrow-up"></i>
+                            @elseif($voters_tps['voters_count'] < $voters_tps['voters_total'])
+                                <i class="fas fa-arrow-down"></i>
+                            @else
+                                <i class="fas fa-equals"></i>
+                            @endif
+                        </div>
+                        <div class="box-body">
+                            <div class="box-title">
+                                {{ $voters_tps['district_name'] . ' / ' . $voters_tps['village_name'] . ' / ' . $voters_tps['label'] }}
+                            </div>
+                            <div class="box-count">
+                                {{ GeneralHelper::number_format($voters_tps['voters_count']) }}
+                            </div>
+                            <div class="box-sub-count">
+                                {{ GeneralHelper::number_format($voters_tps['voters_total']) }} DPT
+                                <div @class([
+                                    'text-success',
+                                    'text-danger' =>
+                                        ($voters_tps['voters_total']
+                                            ? ($voters_tps['voters_count'] / $voters_tps['voters_total']) * 100
+                                            : 0) < 50,
+                                ])>
+                                    {{ GeneralHelper::number_format($voters_tps['voters_total'] ? ($voters_tps['voters_count'] / $voters_tps['voters_total']) * 100 : 0, true) }}%
                                 </div>
                             </div>
                         </div>

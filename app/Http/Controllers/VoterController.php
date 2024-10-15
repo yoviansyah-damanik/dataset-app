@@ -18,11 +18,14 @@ class VoterController extends Controller
         return view('pages.voter.create');
     }
 
+    public function create_family()
+    {
+        return view('pages.voter.create_family');
+    }
+
     public function show(Voter $voter)
     {
-        if (!auth()->user()->hasPermissionTo('show voter ' . $voter->id)) {
-            abort(401);
-        }
+
         return view('pages.voter.show', ['voter' => $voter]);
     }
 

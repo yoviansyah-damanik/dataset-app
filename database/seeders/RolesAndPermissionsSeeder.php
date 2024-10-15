@@ -19,6 +19,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         Permission::create(['name' => 'create voter']);
+        Permission::create(['name' => 'create voter family']);
         Permission::create(['name' => 'read voter']);
         Permission::create(['name' => 'show voter']);
         Permission::create(['name' => 'update voter']);
@@ -74,6 +75,8 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete users']);
         Permission::create(['name' => 'read users administrator']);
 
+        Permission::create(['name' => 'personalization']);
+
         Permission::create(['name' => 'general config']);
         Permission::create(['name' => 'log_activity config']);
         Permission::create(['name' => 'log_activity config all']);
@@ -101,7 +104,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Role::create(['name' => 'Administrator Keluarga'])
             ->givePermissionTo(
-                'create voter',
+                'create voter family',
                 'show voter',
                 'read voter',
                 'read dpt',
@@ -124,7 +127,8 @@ class RolesAndPermissionsSeeder extends Seeder
                     'read voter',
                     'read region',
                     'read master',
-                    'log_activity config'
+                    'log_activity config',
+                    'personalization'
                 ]
             );
 
@@ -135,7 +139,8 @@ class RolesAndPermissionsSeeder extends Seeder
                     'read voter',
                     'read region',
                     'read master',
-                    'log_activity config'
+                    'log_activity config',
+                    'personalization'
                 ]
             );
 
@@ -145,7 +150,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'read voter',
                 'read region',
                 'read master',
-                'log_activity config'
+                'log_activity config',
+                'personalization'
             ]);
 
         Role::create(['name' => 'Koordinator Keluarga'])
@@ -154,7 +160,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'read voter',
                 'read region',
                 'read master',
-                'log_activity config'
+                'log_activity config',
+                'personalization'
             ]);
 
         Role::create(['name' => 'Tim Bersinar'])
@@ -163,7 +170,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'read voter',
                 'read region',
                 'read master',
-                'log_activity config'
+                'log_activity config',
+                'personalization'
             ]);
     }
 }

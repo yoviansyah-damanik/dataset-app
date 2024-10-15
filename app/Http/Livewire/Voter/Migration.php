@@ -27,6 +27,7 @@ class Migration extends Component
             $data = Voter::with('district', 'village', 'tps')
                 ->whereEncrypted('name', 'like', "$this->search%")
                 ->orWhereEncrypted('nik', 'like', "$this->search%")
+                ->whereNull('family_coor_id')
                 ->limit(10)
                 ->get();
 

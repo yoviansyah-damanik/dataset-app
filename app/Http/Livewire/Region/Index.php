@@ -20,12 +20,14 @@ class Index extends Component
                 $q->withCount(['dpts', 'voters']);
             },
         ])
-            ->withCount('dpts')
+            ->withCount('voters', 'dpts')
             ->get();
 
-        $districts_voters_count = $districts->sum('voters_count');
+        $districts_voters_count = $districts
+            ->sum('voters_count');
+
         $districts_voters_total = $districts
-            ->sum(fn($q) => $q->tpses->sum('dpts_count'));
+            ->sum('dpts_count');
 
         return view('livewire.region.index', compact(
             'districts',

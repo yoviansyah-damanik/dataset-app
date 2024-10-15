@@ -21,7 +21,7 @@ return new class extends Migration
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             // $table->rememberToken();
-            $table->timestamp('last_login')->default(now());
+            $table->timestamp('last_login')->nullable();
             $table->char('is_active', 1)->default(1);
             $table->foreignId('district_id')->nullable();
             $table->foreignId('village_id')->nullable();

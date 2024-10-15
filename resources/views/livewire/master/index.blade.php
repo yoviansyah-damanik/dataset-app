@@ -35,7 +35,10 @@
                         {{ $total_marital_statuses }}
                     </div>
                 </div>
-                <a class="stretched-link" href="{{ route('master.marital_status') }}"></a>
+
+                @haspermission('master marital_status')
+                    <a class="stretched-link" href="{{ route('master.marital_status') }}"></a>
+                @endhaspermission
             </div>
         </div>
         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -51,7 +54,9 @@
                         {{ $total_professions }}
                     </div>
                 </div>
-                <a class="stretched-link" href="{{ route('master.profession') }}"></a>
+                @haspermission('master profession')
+                    <a class="stretched-link" href="{{ route('master.profession') }}"></a>
+                @endhaspermission
             </div>
         </div>
         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -67,7 +72,9 @@
                         {{ $total_religions }}
                     </div>
                 </div>
-                <a class="stretched-link" href="{{ route('master.religion') }}"></a>
+                @haspermission('master religion')
+                    <a class="stretched-link" href="{{ route('master.religion') }}"></a>
+                @endhaspermission
             </div>
         </div>
         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -83,7 +90,9 @@
                         {{ $total_nasionalities }}
                     </div>
                 </div>
-                <a class="stretched-link" href="{{ route('master.nasionality') }}"></a>
+                @haspermission('master nasionality')
+                    <a class="stretched-link" href="{{ route('master.nasionality') }}"></a>
+                @endhaspermission
             </div>
         </div>
     </div>

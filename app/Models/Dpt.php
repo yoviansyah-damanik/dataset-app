@@ -11,6 +11,7 @@ class Dpt extends Model
 {
     use HasFactory;
 
+    public $guarded = ['id'];
     public $timestamps = false;
 
     public function genderFull(): Attribute

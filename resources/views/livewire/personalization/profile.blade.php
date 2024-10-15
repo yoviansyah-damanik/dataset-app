@@ -23,17 +23,6 @@
                 @enderror
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group position-relative">
-                <label for="email">Email</label>
-                <input type="email" id="email" wire:model="email" class="form-control">
-                @error('email')
-                    <div class="invalid-tooltip">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-        </div>
     </div>
     <div class="row mt-3">
         <div class="col-12 text-end">

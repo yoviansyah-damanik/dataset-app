@@ -216,19 +216,19 @@ class Create extends Component
                 break;
             case 3:
                 if (!$this->district_coor) {
-                    $this->alert('warning', 'Silahkan pilih Tim Bersinar terlebih dahulu.');
+                    $this->alert('warning', 'Silahkan pilih Koordinator Kecamatan terlebih dahulu.');
                     return;
                 }
                 break;
             case 4:
                 if (!$this->village_coor) {
-                    $this->alert('warning', 'Silahkan pilih Tim Bersinar terlebih dahulu.');
+                    $this->alert('warning', 'Silahkan pilih Koordinator Kelurahan/Desa terlebih dahulu.');
                     return;
                 }
                 break;
             case 5:
                 if (!$this->tps_coor) {
-                    $this->alert('warning', 'Silahkan pilih Tim Bersinar terlebih dahulu.');
+                    $this->alert('warning', 'Silahkan pilih Koordinator TPS terlebih dahulu.');
                     return;
                 }
 
@@ -419,7 +419,10 @@ class Create extends Component
         } else {
             $this->step = 1;
             $this->is_nik_valid = false;
-            $this->valid_message = 'NIK telah didaftarkan oleh <strong>' . $is_exist->created_by->fullname . '</strong> dengan Tim Bersinar <strong>' . $is_exist->team_by->fullname . '</strong> dengan nama <strong>' . $is_exist->name . '</strong> pada <strong>' . $is_exist->tps->name . ', ' . $is_exist->village->name . ', ' . $is_exist->district->name . '</strong>.';
+            if ($is_exist->family_coor_id)
+                $this->valid_message = 'NIK telah didaftarkan oleh <strong>' . $is_exist->created_by->fullname . '</strong> dengan Tim Keluarga <strong>' . $is_exist->family_coor->fullname . '</strong> dengan nama <strong>' . $is_exist->name . '</strong> pada <strong>' . $is_exist->tps->name . ', ' . $is_exist->village->name . ', ' . $is_exist->district->name . '</strong>.';
+            else
+                $this->valid_message = 'NIK telah didaftarkan oleh <strong>' . $is_exist->created_by->fullname . '</strong> dengan Tim Bersinar <strong>' . $is_exist->team_by->fullname . '</strong> dengan nama <strong>' . $is_exist->name . '</strong> pada <strong>' . $is_exist->tps->name . ', ' . $is_exist->village->name . ', ' . $is_exist->district->name . '</strong>.';
         }
     }
 

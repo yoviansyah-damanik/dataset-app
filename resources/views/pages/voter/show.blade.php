@@ -65,6 +65,19 @@
                     </div>
                 </div>
                 <table class="table table-borderless order-1">
+                    @if ($voter->family_coor_id)
+                        <tr>
+                            <th style="background-color: var(--bs-success); text-align: center; color:#fff;" colspan=2>
+                                Tim Keluarga
+                            </th>
+                        </tr>
+                    @else
+                        <tr>
+                            <th style="background-color: var(--bs-danger); text-align: center; color:#fff;" colspan=2>
+                                Tim Bersinar
+                            </th>
+                        </tr>
+                    @endif
                     <tr>
                         <th style="background-color: var(--topbar-color); text-align: center; color:#fff;" colspan=2>
                             Data Pemilih
@@ -180,26 +193,34 @@
                             Data Koordinator
                         </th>
                     </tr>
-                    <tr>
-                        <th>Koordinator Kecamatan</th>
-                        <td>{{ $voter->district_coor->fullname }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Koordinator Kelurahan/Desa</th>
-                        <td>{{ $voter->village_coor->fullname }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Koordinator TPS</th>
-                        <td>{{ $voter->tps_coor->fullname }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Tim Bersinar</th>
-                        <td>{{ $voter->team_by->fullname }}
-                        </td>
-                    </tr>
+                    @if ($voter->family_coor_id)
+                        <tr>
+                            <th>Koordinator Keluarga</th>
+                            <td>{{ $voter->family_coor->fullname }}
+                            </td>
+                        </tr>
+                    @else
+                        <tr>
+                            <th>Koordinator Kecamatan</th>
+                            <td>{{ $voter->district_coor->fullname }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Koordinator Kelurahan/Desa</th>
+                            <td>{{ $voter->village_coor->fullname }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Koordinator TPS</th>
+                            <td>{{ $voter->tps_coor->fullname }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tim Bersinar</th>
+                            <td>{{ $voter->team_by->fullname }}
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <th style="background-color: var(--topbar-color); text-align: center; color:#fff;" colspan=2>
                             Data Lainnya

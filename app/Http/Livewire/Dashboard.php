@@ -335,6 +335,7 @@ class Dashboard extends Component
             $this->voters_by_district();
             $this->most_voters_district();
             $this->most_voters_village();
+            $this->most_voters_tps();
         }
 
         $this->voters_by_village(auth()->user()->role_name == 'Superadmin' ? $this->district : auth()->user()->district_id);
@@ -359,30 +360,21 @@ class Dashboard extends Component
             $this->voters_by_district();
             $this->voters_by_village(auth()->user()->role_name == 'Superadmin' ? $this->district : auth()->user()->district_id);
             $this->voters_by_tps(auth()->user()->role_name == 'Superadmin' ? $this->district : auth()->user()->district_id);
-            $this->most_voters_district();
-            $this->most_voters_village();
+            // $this->most_voters_district();
+            // $this->most_voters_village();
+            // $this->most_voters_tps();
         }
     }
 
     public function user_recap()
     {
-        $this->users_total = User::with('roles')->get();
+        $this->users_total = User::count();
 
-        $this->coordinator_1_total = $this->users_total->filter(
-            fn($user) => $user->roles->where('name', 'Koordinator Kecamatan')->toArray()
-        )->count();
-        $this->coordinator_2_total = $this->users_total->filter(
-            fn($user) => $user->roles->where('name', 'Koordinator Kelurahan/Desa')->toArray()
-        )->count();
-        $this->coordinator_3_total = $this->users_total->filter(
-            fn($user) => $user->roles->where('name', 'Koordinator TPS')->toArray()
-        )->count();
-        $this->coordinator_4_total = $this->users_total->filter(
-            fn($user) => $user->roles->where('name', 'Tim Bersinar')->toArray()
-        )->count();
-        $this->administrator_total = $this->users_total->filter(
-            fn($user) => $user->roles->whereIn('name', ['Administrator', 'Superadmin'])->toArray()
-        )->count();
+        $this->coordinator_1_total = User::role('Koordinator Kecamatan')->count();
+        $this->coordinator_2_total = User::role('Koordinator Kelurahan/Desa')->count();
+        $this->coordinator_3_total = User::role('Koordinator TPS')->count();
+        $this->coordinator_4_total = User::role('Tim Bersinar')->count();
+        $this->administrator_total = User::role(['Administrator', 'Superadmin'])->count();
     }
 
     public function region_recap()
@@ -406,11 +398,8 @@ class Dashboard extends Component
             ->selectRaw(
                 'd.name, '
                     . '(select count(v.id) from voters v '
-                    . 'where v.district_id = d.id '
-                    . 'and v.village_id in (select vl.id from villages as vl where vl.district_id = d.id) '
-                    . 'and v.tps_id in (select t.id from tps as t where t.village_id in (select vl.id from villages as vl where vl.district_id = d.id)))'
-                    . 'as voters_count, '
-                    . '(select sum((select sum(voters_total) from tps as t where t.village_id = vl.id)) from villages as vl where vl.district_id = d.id) as voters_total'
+                    . 'where v.district_id = d.id) as voters_count, '
+                    . '(select count(dpt.id) from dpts dpt where dpt.district_id = d.id) as voters_total'
             )->get();
 
         $this->voters_by_district = $voters_by_district->map(
@@ -420,19 +409,9 @@ class Dashboard extends Component
 
     public function most_voters_district()
     {
-        $this->most_voters_district = DB::table('districts', 'd')
-            ->selectRaw(
-                'd.name, '
-                    . '(select count(v.id) from voters v '
-                    . 'where v.district_id = d.id '
-                    . 'and v.village_id in (select vl.id from villages as vl where vl.district_id = d.id) '
-                    . 'and v.tps_id in (select t.id from tps as t where t.village_id in (select vl.id from villages as vl where vl.district_id = d.id)))'
-                    . 'as voters_count, '
-                    . '(select sum((select sum(voters_total) from tps as t where t.village_id = vl.id)) from villages as vl where vl.district_id = d.id) as voters_total'
-            )
-            ->orderBy('voters_count', 'desc')
-            ->limit(3)
-            ->get();
+        $this->most_voters_district = collect($this->voters_by_district)
+            ->sortByDesc('voters_count')
+            ->take(3);
     }
 
     public function voters_by_village($district)
@@ -440,18 +419,15 @@ class Dashboard extends Component
         $voters_by_village = DB::table('villages', 'vl')
             ->selectRaw(
                 'vl.name, d.name as district_name, '
-                    . '(select count(v.id) from voters v '
-                    . 'where v.village_id = vl.id '
-                    . 'and v.tps_id in (select t.id from tps as t where t.village_id = vl.id))'
-                    . 'as voters_count, '
-                    . '(select sum(voters_total) from tps as t where t.village_id = vl.id) as voters_total'
+                    . '(select count(v.id) from voters v where v.village_id = vl.id) as voters_count, '
+                    . '(select count(dpt.id) from dpts dpt where dpt.village_id = vl.id) as voters_total'
             )
             ->join('districts as d', 'd.id', '=', 'vl.district_id')
             ->where('vl.district_id', $district)
             ->get();
 
         $this->voters_by_village = $voters_by_village->map(
-            fn($q) => ['label' => $q->name, 'voters_count' => $q->voters_count, 'voters_total' => $q->voters_total]
+            fn($q) => ['label' => $q->name, 'district_name' => $q->district_name, 'voters_count' => $q->voters_count, 'voters_total' => $q->voters_total]
         )->toArray();
     }
 
@@ -460,16 +436,16 @@ class Dashboard extends Component
         $this->most_voters_village = DB::table('villages', 'vl')
             ->selectRaw(
                 'vl.name, d.name as district_name, '
-                    . '(select count(v.id) from voters v '
-                    . 'where v.village_id = vl.id '
-                    . 'and v.tps_id in (select t.id from tps as t where t.village_id = vl.id))'
-                    . 'as voters_count, '
-                    . '(select sum(voters_total) from tps as t where t.village_id = vl.id) as voters_total'
+                    . '(select count(v.id) from voters v where v.village_id = vl.id) as voters_count, '
+                    . '(select count(dpt.id) from dpts dpt where dpt.village_id = vl.id) as voters_total'
             )
             ->join('districts as d', 'd.id', '=', 'vl.district_id')
             ->orderBy('voters_count', 'desc')
             ->limit(3)
-            ->get();
+            ->get()
+            ->map(
+                fn($q) => ['label' => $q->name, 'district_name' => $q->district_name, 'voters_count' => $q->voters_count, 'voters_total' => $q->voters_total]
+            )->toArray();
     }
 
     public function voters_by_tps($district)
@@ -486,12 +462,32 @@ class Dashboard extends Component
                         ->selectRaw(
                             't.name as tps_name, t.voters_total, '
                                 . '(select count(v.id) from voters v where v.tps_id = t.id)'
-                                . 'as voters_count'
+                                . 'as voters_count, '
+                                . '(select count(dpt.id) from dpts dpt where dpt.tps_id = t.id)'
+                                . 'as voters_total'
                         )
                         ->where('t.village_id', $village->id)
                         ->get()
                 ];
             }
         )->toArray();
+    }
+
+    public function most_voters_tps()
+    {
+        $this->most_voters_tps = DB::table('tps', 't')
+            ->selectRaw(
+                't.name, d.name as district_name, vl.name as village_name, '
+                    . '(select count(v.id) from voters v where v.tps_id = t.id) as voters_count, '
+                    . '(select count(dpt.id) from dpts dpt where dpt.tps_id = t.id) as voters_total'
+            )
+            ->join('villages as vl', 'vl.id', '=', 't.village_id')
+            ->join('districts as d', 'd.id', '=', 'vl.district_id')
+            ->orderBy('voters_count', 'desc')
+            ->limit(3)
+            ->get()
+            ->map(
+                fn($q) => ['label' => $q->name, 'district_name' => $q->district_name, 'village_name' => $q->village_name, 'voters_count' => $q->voters_count, 'voters_total' => $q->voters_total]
+            )->toArray();
     }
 }

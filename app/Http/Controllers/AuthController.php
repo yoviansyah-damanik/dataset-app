@@ -33,10 +33,15 @@ class AuthController extends Controller
                 return to_route('login')->withInput()->with('msg', 'Akun anda telah dinonaktifkan! Silahkan hubungi Administrator.');
             }
 
+            $user->update(
+                [
+                    'last_login' => now()
+                ]
+            );
+
             Auth::login($user, $request->has('remember'));
 
             $request->session()->regenerate();
-            $user->update(['last_login' => now()]);
 
             History::makeHistory('Login.');
 

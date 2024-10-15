@@ -8,7 +8,7 @@
                     <div class="form-group mb-3 position-relative">
                         <label for="username">Nama Pengguna</label>
                         <input type="text" id="username"class="form-control @error('username') is-invalid @enderror"
-                            wire:model="username" placeholder="Masukkan nama pengguna...">
+                            wire:model.defer="username" placeholder="Masukkan nama pengguna...">
                         @error('username')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -21,21 +21,8 @@
                     <div class="form-group mb-3 position-relative">
                         <label for="fullname">Nama Lengkap</label>
                         <input type="text" id="fullname"class="form-control @error('fullname') is-invalid @enderror"
-                            wire:model="fullname" placeholder="Masukkan nama lengkap...">
+                            wire:model.defer="fullname" placeholder="Masukkan nama lengkap...">
                         @error('fullname')
-                            <div class="invalid-tooltip">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                </div>
-                {{-- EMAIL --}}
-                <div class="col-12">
-                    <div class="form-group mb-3 position-relative">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control @error('email') is-invalid @enderror"
-                            wire:model="email" placeholder="Masukkan nama email...">
-                        @error('email')
                             <div class="invalid-tooltip">
                                 {{ $message }}
                             </div>
@@ -47,7 +34,7 @@
                     <div class="form-group mb-3 position-relative">
                         <label for="role_name">Role</label>
                         <select id="role_name" class="form-select @error('role_name') is-invalid @enderror"
-                            wire:model="role_name" wire:change='set_init'>
+                            wire:model.defer="role_name" wire:change='set_init'>
                             <option hidden>--Pilih Role--</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -131,7 +118,7 @@
                     <div class="form-group mb-3 position-relative">
                         <label for="password">Kata Sandi</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror"
-                            wire:model="password" placeholder="Masukkan nama kata sandi...">
+                            wire:model.defer="password" placeholder="Masukkan nama kata sandi...">
                         @error('password')
                             <div class="invalid-tooltip">
                                 {{ $message }}

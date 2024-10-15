@@ -12,10 +12,11 @@
         content="{{ GeneralHelper::get_app_name() . ' (' . GeneralHelper::get_abb_app_name() . ') - ' . GeneralHelper::get_unit_name() }}" />
     <title>{{ GeneralHelper::get_app_name() . ' | ' . GeneralHelper::get_unit_name() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ GeneralHelper::get_favicon() }}">
-    <link href="{{ asset('css/main.min.css') }}" rel="stylesheet" />
     @production
         <link rel="stylesheet" href="{{ asset('css/custom.min.css') }}">
+        <link href="{{ asset('css/main.min.css') }}" rel="stylesheet" />
     @else
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     @endproduction
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"

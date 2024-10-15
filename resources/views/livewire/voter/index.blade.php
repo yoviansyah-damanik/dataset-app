@@ -288,7 +288,7 @@
                             <td>
                                 @if ($voter->family_coor_id)
                                     <div class="badge bg-success">
-                                        Koordinator
+                                        Tim Keluarga
                                     </div>
                                     <div class="d-flex gap-1">
                                         <div class="fw-bold voter-table-width">
@@ -297,8 +297,8 @@
                                         <div style="flex: 1 1 0%">
                                             @if (in_array(auth()->user()->role_name, ['Superadmin']))
                                                 <a
-                                                    href="{{ route('users', ['s' => $voter->family_coor_id->fullname]) }}">
-                                                    {{ $voter->family_coor_id->fullname }}
+                                                    href="{{ route('users', ['s' => $voter->family_coor->fullname]) }}">
+                                                    {{ $voter->family_coor->fullname }}
                                                 </a>
                                             @else
                                                 {{ $voter->created_by->fullname }}

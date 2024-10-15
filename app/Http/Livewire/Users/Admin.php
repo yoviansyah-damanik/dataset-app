@@ -29,12 +29,12 @@ class Admin extends Component
     public function show_admins()
     {
         $this->users =  User::with('district')
-            ->role('Administrator')
+            ->role(['Administrator', 'Administrator Keluarga'])
             ->get()
             ->map(function ($user) {
                 return [
                     ...$user->toArray(),
-                    'district_name' => $user->district->name,
+                    'district_name' => $user?->district?->name ?? '-'
                 ];
             })->toArray();
     }
@@ -42,14 +42,14 @@ class Admin extends Component
     public function refresh_admin_password()
     {
         $this->users =  User::with('district')
-            ->role('Administrator')
+            ->role(['Administrator', 'Administrator Keluarga'])
             ->get()
             ->map(function ($user) {
                 $new_password = Str::random(12);
                 $user->update(['password' => bcrypt($new_password)]);
                 return [
                     ...$user->toArray(),
-                    'district_name' => $user->district->name,
+                    'district_name' => $user?->district?->name ?? '-',
                     'new_password' => $new_password
                 ];
             })->toArray();

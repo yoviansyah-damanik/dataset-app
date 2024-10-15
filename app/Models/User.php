@@ -57,6 +57,7 @@ class User extends Authenticatable
         'username',
         'fullname',
         'email',
+        'last_login',
         'password',
         'district_id',
         'village_id',
@@ -79,10 +80,10 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'last_login' => 'datetime',
     ];
 
-    protected $dates = ['deleted_at'];
+    // protected $dates = ['deleted_at'];
 
     public function getRoleNameAttribute(): string
     {

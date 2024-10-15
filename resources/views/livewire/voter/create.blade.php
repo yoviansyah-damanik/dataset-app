@@ -770,9 +770,10 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
-                            <div class="form-group" wire:ignore>
+                            <div class="form-group">
                                 <label for="agama" class="form-label label-important">Agama</label>
-                                <select id="religion_id" class="form-select @error('agama') is-invalid @enderror">
+                                <select id="religion_id" class="form-select @error('agama') is-invalid @enderror"
+                                    wire:model="agama">
                                     @foreach ($religions as $religion)
                                         <option value="{{ $religion->id }}">{{ $religion->name }}</option>
                                     @endforeach
@@ -787,11 +788,12 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
-                            <div class="form-group" wire:ignore>
+                            <div class="form-group">
                                 <label for="status_perkawinan" class="form-label label-important">Status
                                     Perkawinan</label>
                                 <select id="marital_status_id"
-                                    class="form-select @error('status_perkawinan') is-invalid @enderror">
+                                    class="form-select @error('status_perkawinan') is-invalid @enderror"
+                                    wire:model="status_perkawinan">
                                     @foreach ($marital_statuses as $marital_status)
                                         <option value="{{ $marital_status->id }}">{{ $marital_status->name }}
                                         </option>
@@ -807,10 +809,11 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
-                            <div class="form-group" wire:ignore>
+                            <div class="form-group">
                                 <label for="pekerjaan" class="form-label label-important">Pekerjaan</label>
                                 <select id="profession_id"
-                                    class="form-select @error('pekerjaan') is-invalid @enderror">
+                                    class="form-select @error('pekerjaan') is-invalid @enderror"
+                                    wire:model="pekerjaan">
                                     @foreach ($professions as $profession)
                                         <option value="{{ $profession->id }}">{{ $profession->name }}</option>
                                     @endforeach
@@ -825,11 +828,12 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="mb-3 position-relative">
-                            <div class="form-group" wire:ignore>
+                            <div class="form-group">
                                 <label for="kewarganegaraan"
                                     class="form-label label-important">Kewarganegaraan</label>
                                 <select id="nasionality_id"
-                                    class="form-select @error('kewarganegaraan') is-invalid @enderror">
+                                    class="form-select @error('kewarganegaraan') is-invalid @enderror"
+                                    wire:model="kewarganegaraan">
                                     @foreach ($nasionalities as $nasionality)
                                         <option value="{{ $nasionality->id }}">{{ $nasionality->name }}</option>
                                     @endforeach

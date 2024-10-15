@@ -18,7 +18,7 @@
             </ol>
         </div>
 
-        @if (auth()->user()->role_name != 'Administrator')
+        @if (!in_array(auth()->user()->role_name, ['Administrator', 'Administrator Keluarga']))
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="card-2">

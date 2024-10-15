@@ -49,7 +49,13 @@ class SidebarHelper
                     'title' => 'Tambah Data',
                     'route' => 'voters.create',
                     'icon' => 'fas fa-plus',
-                    'permission' => $permissions->some('create voter')
+                    'permission' =>   $permissions->some('create voter')
+                ],
+                [
+                    'title' => 'Tambah Data Keluarga',
+                    'route' => 'voters.create.family',
+                    'icon' => 'fas fa-plus',
+                    'permission' =>  $permissions->some('create voter family')
                 ],
                 [
                     'title' => 'Cetak',
@@ -145,7 +151,7 @@ class SidebarHelper
                     'title' => 'Personalisasi',
                     'route' => 'personalization',
                     'icon' => 'fas fa-user',
-                    'permission' => true
+                    'permission' => $permissions->some('personalization')
                 ],
                 [
                     'title' => 'Manajemen Pengguna',

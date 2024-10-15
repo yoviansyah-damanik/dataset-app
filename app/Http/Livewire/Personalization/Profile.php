@@ -18,7 +18,6 @@ class Profile extends Component
     {
         $this->username = Auth::user()->username;
         $this->fullname = Auth::user()->fullname;
-        $this->email = Auth::user()->email;
     }
 
     public function render()
@@ -31,7 +30,6 @@ class Profile extends Component
         return [
             'username' => 'required|max:16|unique:users,username,' . Auth::id(),
             'fullname' => 'required|max:30',
-            'email' => 'required|unique:users,email,' . Auth::id(),
         ];
     }
 
@@ -55,7 +53,6 @@ class Profile extends Component
         $user = User::find(Auth::id());
         $user->username = $this->username;
         $user->fullname = $this->fullname;
-        $user->email = $this->email;
         $user->save();
 
         History::makeHistory('Memperbaharui profil.', 'personalization.update');
