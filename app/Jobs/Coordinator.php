@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\District;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Collection;
@@ -38,14 +39,15 @@ class Coordinator implements ShouldQueue
             $data = fgetcsv($file);
             if ($data) {
                 $username = \Illuminate\Support\Str::of($data[1] . ' ' . $data[0])->lower()->snake()->value;
-                $payload = [
+                $payload = new Collection([
                     'username' => $username,
                     'fullname' => $data[1],
                     'district' => "PADANGSIDIMPUAN $data[0]",
+                    'district_id' => District::where('name', "PADANGSIDIMPUAN $data[0]")->first()->id,
                     'password' => bcrypt($username)
-                ];
+                ]);
 
-                \App\Models\User::create($payload)->assignRole('Koordinator Kecamatan');
+                \App\Models\User::create($payload->except('district')->toArray())->assignRole('Koordinator Kecamatan');
                 $data_added->push([...$payload, 'role' => 'Koordinator Kecamatan']);
             }
         }

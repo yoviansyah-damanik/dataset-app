@@ -14,12 +14,16 @@
             </li>
         </ol>
     </div>
-    <div class="row">
-        <div class="col-lg-5 col-xxl-4">
-            <livewire:voter.print.form />
+    @production
+        <div class="row">
+            <div class="col-lg-5 col-xxl-4">
+                <livewire:voter.print.form />
+            </div>
+            <div class="col-lg-7 col-xxl-8">
+                <livewire:voter.print.datalist />
+            </div>
         </div>
-        <div class="col-lg-7 col-xxl-8">
-            <livewire:voter.print.datalist />
-        </div>
-    </div>
+    @else
+        Sedang dalam pengembangan
+    @endproduction
 </div>
