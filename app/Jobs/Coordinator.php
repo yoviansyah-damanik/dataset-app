@@ -29,7 +29,7 @@ class Coordinator implements ShouldQueue
     public function handle(): void
     {
         $data_added = new Collection();
-        User::withoutRole('Superadmin')
+        User::withoutRole(['Superadmin', 'Administrator', 'Administrator Keluarga'])
             ->delete();
         // \Spatie\Permission\Models\Permission::truncate();
         // \Spatie\Permission\Models\Role::truncate();

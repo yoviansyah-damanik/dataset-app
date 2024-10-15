@@ -25,6 +25,6 @@ class ConfigurationController extends Controller
         dispatch(new Dpt());
 
         Alert::toast('Data sedang ditambahkan. Proses berjalan di latar belakang sistem.', 'success');
-        return to_route('dashboard');
+        return to_route('users');
     }
 }
