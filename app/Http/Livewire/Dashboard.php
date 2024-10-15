@@ -410,8 +410,9 @@ class Dashboard extends Component
     public function most_voters_district()
     {
         $this->most_voters_district = collect($this->voters_by_district)
-            ->sortBy('voters_count')
-            ->take(3);
+            ->sortByDesc('voters_count')
+            ->take(3)
+            ->values();
     }
 
     public function voters_by_village($district)
