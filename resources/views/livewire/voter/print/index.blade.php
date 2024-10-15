@@ -24,6 +24,6 @@
             </div>
         </div>
     @else
-        Sedang dalam pengembangan
+        Sedang dalam pengembangan...
     @endproduction
 </div>
