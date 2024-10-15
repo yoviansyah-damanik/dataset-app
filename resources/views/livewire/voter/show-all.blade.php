@@ -50,7 +50,7 @@
                     </div>
                     <div style="flex: 1 1 0%">
                         {{ $voters?->total() ? GeneralHelper::number_format($voters->total()) : 0 }} Pemilih
-                        ({{ $voters?->total() ? GeneralHelper::number_format(($voters->total() / $voters_total) * 100, true) : 0 }}%)
+                        ({{ $voters?->total() ? GeneralHelper::number_format($dpts_count > 0 ? ($voters->total() / $dpts_count) * 100 : 0, true) : 0 }}%)
                     </div>
                 </div>
                 <div class="d-flex gap-1">
@@ -58,7 +58,7 @@
                         Total DPT
                     </div>
                     <div style="flex: 1 1 0%">
-                        {{ $voters_total ? GeneralHelper::number_format($voters_total) : 0 }} DPT
+                        {{ $dpts_count ? GeneralHelper::number_format($dpts_count) : 0 }} DPT
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="input-group-text" id="btnGroupAddon2">
                     <i class="fas fa-search"></i>
                 </div>
-                <input type="text" class="form-control w-50" id="colFormLabelSm" placeholder="Cari..."
+                <input type="search" class="form-control w-50" id="colFormLabelSm" placeholder="Cari..."
                     wire:model="search">
                 <select class="form-select" wire:model="attribute_search">
                     <option value="name">Nama</option>
@@ -128,7 +128,7 @@
                                             No. Telp.
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $voter->phone_number }}
+                                            {{ $voter->phone_number ?: '-' }}
                                         </div>
                                     </div>
                                     <div class="d-flex gap-1">
@@ -136,7 +136,7 @@
                                             Alamat
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $voter->address }}
+                                            {{ $voter->address ?: '-' }}
                                         </div>
                                     </div>
                                     <div class="d-flex gap-1">
@@ -173,14 +173,44 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-1">
-                                        <div class="fw-bold voter-table-width">
+                                    @if ($voter->family_coor_id)
+                                        <div class="badge bg-success">
+                                            Tim Keluarga
+                                        </div>
+                                        <div class="d-flex gap-1">
+                                            <div class="fw-bold voter-table-width">
+                                                Koordinator Keluarga
+                                            </div>
+                                            <div style="flex: 1 1 0%">
+                                                @if (in_array(auth()->user()->role_name, ['Superadmin']))
+                                                    <a
+                                                        href="{{ route('users', ['s' => $voter->family_coor->fullname]) }}">
+                                                        {{ $voter->family_coor->fullname }}
+                                                    </a>
+                                                @else
+                                                    {{ $voter->created_by->fullname }}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="badge bg-danger">
                                             Tim Bersinar
                                         </div>
-                                        <div style="flex: 1 1 0%">
-                                            {{ $voter->team_by->fullname }}
+                                        <div class="d-flex gap-1">
+                                            <div class="fw-bold voter-table-width">
+                                                Koordinator
+                                            </div>
+                                            <div style="flex: 1 1 0%">
+                                                @if (in_array(auth()->user()->role_name, ['Superadmin']))
+                                                    <a href="{{ route('users', ['s' => $voter->team_by->fullname]) }}">
+                                                        {{ $voter->team_by->fullname }}
+                                                    </a>
+                                                @else
+                                                    {{ $voter->created_by->fullname }}
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                     <div class="d-flex gap-1">
                                         <div class="fw-bold voter-table-width">
                                             Kecamatan
@@ -210,9 +240,11 @@
                                             Diperbaharui pada
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $voter->updated_at->format('d M Y H:i:s') }}
+                                            {{ $voter->updated_at->translatedFormat('d M Y H:i:s') }}
                                         </div>
                                     </div>
+
+
                                 </td>
                                 <td class="text-center">
                                     @if ($voter->ktp)

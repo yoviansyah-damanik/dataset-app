@@ -132,7 +132,7 @@
                         <div class="input-group-text" id="btnGroupAddon2">
                             <i class="fas fa-search"></i>
                         </div>
-                        <input type="text" class="form-control w-50" id="colFormLabelSm" placeholder="Cari..."
+                        <input type="search" class="form-control w-50" id="colFormLabelSm" placeholder="Cari..."
                             wire:model="search">
                         <select class="form-select" wire:model="attribute_search">
                             <option value="name">Nama</option>

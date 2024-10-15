@@ -38,7 +38,7 @@
         </div>
         <div class="card-2">
             <div class="mb-4">
-                <input type="text" placeholder="Cari pemilih..." class="form-control" id="search"
+                <input type="search" placeholder="Cari pemilih..." class="form-control" id="search"
                     wire:model="search">
             </div>
             <div class="overflow-auto" style="max-height:450px">

@@ -148,6 +148,11 @@ class User extends Authenticatable
         return $this->hasMany(Voter::class, 'team_id', 'id');
     }
 
+    public function voters_by_family(): HasMany
+    {
+        return $this->hasMany(Voter::class, 'family_coor_id', 'id');
+    }
+
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class);

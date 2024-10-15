@@ -128,7 +128,7 @@
 
         <div class="card-2">
             <div class="mb-3">
-                <input type="text" placeholder="Cari DPT..." class="form-control" wire:model="search">
+                <input type="search" placeholder="Cari DPT..." class="form-control" wire:model="search">
             </div>
             <div class="overflow-auto" style="max-height:450px">
                 <table class="table table-striped table-sm">
@@ -248,7 +248,7 @@
                                             Jumlah Pemilih
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $item?->voters_by_team_count ?? 0 }} Pemilih
+                                            {{ $item?->voters_by_family_count ?? 0 }} Pemilih
                                         </div>
                                     </div>
                                 </td>

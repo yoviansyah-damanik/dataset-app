@@ -175,7 +175,7 @@
                 Silahkan cek ketersediaan NIK terlebih dahulu.
             </div>
             <div class="input-group mx-auto has-validation" style="width:100%; max-width:480px">
-                <input type="text" maxlength="16" class="form-control @error('cek_nik') is-invalid @enderror"
+                <input type="search" maxlength="16" class="form-control @error('cek_nik') is-invalid @enderror"
                     id="cek_nik" wire:model.defer="cek_nik" wire:keyup.enter="check_nik">
                 <button class="btn btn-primary" wire:click="check_nik" type="button" id="button-addon2">Cek
                     NIK</button>
@@ -289,7 +289,7 @@
     @elseif($step == 2)
         <div class="card-2">
             <div class="mb-3 input-group">
-                <input type="text" placeholder="Cari Tim Bersinar..." class="form-control" wire:model="search">
+                <input type="search" placeholder="Cari Tim Bersinar..." class="form-control" wire:model="search">
                 {{-- @if (auth()->user()->role_name == 'Superadmin')
                     <select class="form-select" wire:model="district" wire:change="reset_region('district')">
                         @foreach ($districts as $district)
@@ -388,7 +388,7 @@
     @elseif($step == 3)
         <div class="card-2">
             <div class="mb-3">
-                <input type="text" placeholder="Cari Koordinator Kecamatan..." class="form-control"
+                <input type="search" placeholder="Cari Koordinator Kecamatan..." class="form-control"
                     wire:model="search" />
             </div>
             <div class="overflow-auto" style="max-height:450px">
@@ -471,7 +471,7 @@
     @elseif($step == 4)
         <div class="card-2">
             <div class="mb-3">
-                <input type="text" placeholder="Cari Koordinator Kelurahan/Desa..." class="form-control"
+                <input type="search" placeholder="Cari Koordinator Kelurahan/Desa..." class="form-control"
                     wire:model="search" />
             </div>
             <div class="overflow-auto" style="max-height:450px">
@@ -554,7 +554,7 @@
     @elseif($step == 5)
         <div class="card-2">
             <div class="mb-3">
-                <input type="text" placeholder="Cari Koordinator TPS..." class="form-control"
+                <input type="search" placeholder="Cari Koordinator TPS..." class="form-control"
                     wire:model="search" />
             </div>
             <div class="overflow-auto" style="max-height:450px">

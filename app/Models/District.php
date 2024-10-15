@@ -13,7 +13,7 @@ class District extends Model
 
     public function getVotersTotalAttribute()
     {
-        return $this->tpses->sum('voters_total');
+        return $this->voters->count();
     }
 
     public function villages()

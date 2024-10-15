@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Voter;
 
+use App\Models\Dpt;
 use App\Models\Tps;
 use App\Models\User;
+use App\Models\Voter;
 use App\Models\Village;
 use Livewire\Component;
 use App\Models\District;
-use App\Models\Voter;
 use Livewire\WithPagination;
 
 class ShowAll extends Component
@@ -17,17 +18,17 @@ class ShowAll extends Component
     protected $listeners = ['set_data', 'set_show_region'];
 
     public bool $isFilter = false;
-    public $district, $village, $tps, $user;
+    public $district, $village, $tps, $user, $family;
     public $district_name, $village_name, $tps_name;
     public $search = '';
     public $attribute_search = 'name';
+    public $dpts_count = 0;
 
     public $is_show = false;
 
     public function render()
     {
         $voters = [];
-        $voters_total = 0;
         if ($this->is_show) {
             $voters = Voter::with('village', 'district', 'tps', 'religion', 'profession', 'marital_status', 'nasionality', 'created_by', 'team_by')
                 ->when($this->district?->id, fn($q) => $q->where('district_id', $this->district->id))
@@ -38,20 +39,18 @@ class ShowAll extends Component
                 ->paginate(10, ['*'], 'showVoters');
 
             if ($this->district?->id && !$this->village?->id && !$this->tps?->id)
-                $voters_total = $this->district->voters_total;
+                $this->dpts_count = $this->district->dpts->count();
             elseif ($this->district?->id && $this->village?->id && !$this->tps?->id)
-                $voters_total = $this->village->voters_total;
+                $this->dpts_count = $this->village->dpts_count;
             elseif ($this->district?->id && $this->village?->id && $this->tps?->id)
-                $voters_total = $this->tps->voters_total;
+                $this->dpts_count = $this->tps->dpts->count();
             else
-                $voters_total = District::with('tpses')->withCount('voters')
-                    ->get()
-                    ->sum(fn($q) => $q->tpses->sum('voters_total'));
+                $this->dpts_count = Dpt::count();
         }
 
         $this->dispatchBrowserEvent('votersLoaded');
 
-        return view('livewire.voter.show-all', compact('voters', 'voters_total'));
+        return view('livewire.voter.show-all', compact('voters'));
     }
 
     public function updatingSearch()
@@ -69,24 +68,30 @@ class ShowAll extends Component
                 'village_name',
                 'tps',
                 'tps_name',
-                'user'
+                'user',
+                'dpts_count',
+                'family'
             ]
         );
 
         $this->user = $user;
 
         if ($user->role_name != 'Superadmin') {
-            $this->district = $user->district;
-            $this->district_name = $user->district->name;
+            if (in_array($user->role_name, ['Koordinator Keluarga', 'Administrator Keluarga'])) {
+                $this->family = $user;
+            } else {
+                $this->district = $user->district;
+                $this->district_name = $user->district->name;
 
-            if (in_array($user->role_name, ['Koordinator Kelurahan/Desa', 'Koordinator TPS', 'Tim Bersinar'])) {
-                $this->village = $user->village;
-                $this->village_name = $user->village->name;
-            }
+                if (in_array($user->role_name, ['Koordinator Kelurahan/Desa', 'Koordinator TPS', 'Tim Bersinar'])) {
+                    $this->village = $user->village;
+                    $this->village_name = $user->village->name;
+                }
 
-            if (in_array($user->role_name, ['Koordinator TPS', 'Tim Bersinar'])) {
-                $this->tps = $user->tps;
-                $this->tps_name = $user->tps->name;
+                if (in_array($user->role_name, ['Koordinator TPS', 'Tim Bersinar'])) {
+                    $this->tps = $user->tps;
+                    $this->tps_name = $user->tps->name;
+                }
             }
         }
 

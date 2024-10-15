@@ -124,6 +124,13 @@ class Index extends Component
                     'district_id' => (int)$this->district_id,
                     'village_id' => (int)$this->village_id
                 ];
+        } elseif (in_array($this->user_role, ['Koordinator Keluarga', 'Administrator Keluarga'])) {
+            $update =
+                [
+                    'district_id' => null,
+                    'village_id' => null,
+                    'tps_id' => null
+                ];
         } else {
             $update =
                 [

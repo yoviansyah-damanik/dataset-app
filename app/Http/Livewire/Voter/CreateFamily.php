@@ -79,8 +79,8 @@ class CreateFamily extends Component
         }
 
         if ($this->step == 2) {
-            $this->data = User::with('voters_by_team', 'district', 'village', 'tps', 'roles')
-                ->withCount('voters_by_team')
+            $this->data = User::with('voters_by_family', 'district', 'village', 'tps', 'roles')
+                ->withCount('voters_by_family')
                 ->role('Koordinator Keluarga')
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
                 ->limit(10)
