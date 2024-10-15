@@ -122,6 +122,9 @@ class User extends Authenticatable
             case "Tim Bersinar":
                 return Voter::where('team_id', $this->id)
                     ->count();
+            case "Koordinator Keluarga":
+                return Voter::where('family_coor_id', $this->id)
+                    ->count();
             default:
                 return Voter::count();
         }

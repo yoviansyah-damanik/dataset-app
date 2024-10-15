@@ -47,6 +47,10 @@ class Index extends Component
         return view('livewire.users.index', compact('users', 'roles'));
     }
 
+    public function updated()
+    {
+        $this->resetPage();
+    }
     public function refresh_users()
     {
         $this->s = '';
