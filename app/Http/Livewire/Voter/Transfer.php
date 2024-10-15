@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Voter;
 
+use App\Models\User;
+use App\Models\Voter;
 use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
