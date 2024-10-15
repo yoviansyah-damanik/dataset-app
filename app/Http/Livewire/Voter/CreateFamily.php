@@ -74,7 +74,7 @@ class CreateFamily extends Component
         if ($this->step == 1) {
             $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', $this->search . '%')
                 ->whereDoesntHave('voter')
-                ->limit(20)
+                ->limit(50)
                 ->get();
         }
 
@@ -83,7 +83,7 @@ class CreateFamily extends Component
                 ->withCount('voters_by_family')
                 ->role('Koordinator Keluarga')
                 ->whereEncrypted('fullname', 'like', "$this->search%")
-                ->limit(10)
+                ->limit(50)
                 ->get();
         }
 

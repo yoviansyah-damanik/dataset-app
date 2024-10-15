@@ -290,23 +290,6 @@
         <div class="card-2">
             <div class="mb-3 input-group">
                 <input type="search" placeholder="Cari Tim Bersinar..." class="form-control" wire:model="search">
-                {{-- @if (auth()->user()->role_name == 'Superadmin')
-                    <select class="form-select" wire:model="district" wire:change="reset_region('district')">
-                        @foreach ($districts as $district)
-                            <option value="{{ $district->id }}">{{ $district->name }}</option>
-                        @endforeach
-                    </select>
-                    <select class="form-select" wire:model="village" wire:change="reset_region('village')">
-                        @foreach ($villages as $village)
-                            <option value="{{ $village->id }}">{{ $village->name }}</option>
-                        @endforeach
-                    </select>
-                    <select class="form-select" wire:model="tps_">
-                        @foreach ($tpses as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                @endif --}}
             </div>
             <div class="overflow-auto" style="max-height:450px">
                 <table class="table table-striped table-sm">
@@ -460,7 +443,7 @@
                         @empty
                             <tr>
                                 <td colspan=2 class="text-center">
-                                    Tidak ada Tim Bersinar ditemukan.
+                                    Tidak ada Koordinator Kecamatan ditemukan.
                                 </td>
                             </tr>
                         @endforelse
@@ -543,7 +526,7 @@
                         @empty
                             <tr>
                                 <td colspan=2 class="text-center">
-                                    Tidak ada Tim Bersinar ditemukan.
+                                    Tidak ada Koordinator Kelurahan/Desa ditemukan.
                                 </td>
                             </tr>
                         @endforelse
@@ -626,7 +609,7 @@
                         @empty
                             <tr>
                                 <td colspan=2 class="text-center">
-                                    Tidak ada Tim Bersinar ditemukan.
+                                    Tidak ada Koordinator TPS ditemukan.
                                 </td>
                             </tr>
                         @endforelse
