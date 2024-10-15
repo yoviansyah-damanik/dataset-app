@@ -72,9 +72,9 @@ class CreateFamily extends Component
     public function render()
     {
         if ($this->step == 1) {
-            $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', '%' . $this->search . '%')
+            $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', $this->search . '%')
                 ->whereDoesntHave('voter')
-                ->limit(10)
+                ->limit(20)
                 ->get();
         }
 

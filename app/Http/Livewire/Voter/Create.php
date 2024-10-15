@@ -78,7 +78,7 @@ class Create extends Component
             $this->reset('districts', 'villages', 'tpses');
 
         if ($this->step == 1) {
-            $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', '%' . $this->search . '%')
+            $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', $this->search . '%')
                 ->whereDoesntHave('voter')
                 ->when(
                     auth()->user()->role_name != 'Superadmin',
@@ -90,7 +90,7 @@ class Create extends Component
                         ->where('village_id', $this->kelurahan)
                         ->where('tps_id', $this->tps),
                 )
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
@@ -129,7 +129,7 @@ class Create extends Component
                 ->where('village_id', $this->dpt->village_id)
                 ->where('tps_id', $this->dpt->tps_id)
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
@@ -139,7 +139,7 @@ class Create extends Component
                 ->role('Koordinator Kecamatan')
                 ->where('district_id', $this->kecamatan)
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
@@ -150,7 +150,7 @@ class Create extends Component
                 ->where('district_id', $this->kecamatan)
                 ->where('village_id', $this->kelurahan)
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
@@ -162,7 +162,7 @@ class Create extends Component
                 ->where('village_id', $this->kelurahan)
                 ->where('tps_id', $this->tps)
                 ->whereEncrypted('fullname', 'like', "%$this->search%")
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
