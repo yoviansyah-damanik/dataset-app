@@ -393,6 +393,10 @@ class CreateFamily extends Component
         $this->kecamatan = $dpt->district_id;
         $this->kelurahan = $dpt->village_id;
         $this->tps = $dpt->tps_id;
+
+        $this->alamat = $dpt->address;
+        $this->rt = $dpt->rt;
+        $this->rw = $dpt->rw;
     }
 
     public function set_family_coor(User $user)

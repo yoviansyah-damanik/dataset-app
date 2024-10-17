@@ -473,6 +473,10 @@ class Create extends Component
     public function set_dpt(Dpt $dpt)
     {
         $this->dpt = $dpt;
+
+        $this->alamat = $dpt->address;
+        $this->rt = $dpt->rt;
+        $this->rw = $dpt->rw;
     }
 
     public function set_district_coor(User $user)
