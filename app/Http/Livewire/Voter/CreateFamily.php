@@ -64,17 +64,39 @@ class CreateFamily extends Component
         $villages,
         $tpses;
 
+    public $dpt_districts,
+        $dpt_villages,
+        $dpt_tpses,
+        $dpt_district,
+        $dpt_village,
+        $dpt_tps;
+
     public int $step = 1;
     public bool $is_empty = false;
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->set_dpt_districts();
+    }
 
     public function render()
     {
         if ($this->step == 1) {
             $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', $this->search . '%')
                 ->whereDoesntHave('voter')
-                ->limit(50)
+                ->when(
+                    $this->dpt_district,
+                    fn($r) => $r->where('district_id', $this->dpt_district)
+                        ->when(
+                            $this->dpt_village,
+                            fn($s) => $s->where('village_id', $this->dpt_village)
+                                ->when(
+                                    $this->dpt_tps,
+                                    fn($t) => $t->where('tps_id', $this->dpt_tps)
+                                )
+                        )
+                )
+                ->limit(25)
                 ->get();
         }
 
@@ -347,6 +369,7 @@ class CreateFamily extends Component
     {
         $this->reset();
         $this->resetValidation();
+        $this->set_dpt_districts();
         $this->step = 1;
     }
 
@@ -383,6 +406,7 @@ class CreateFamily extends Component
             'preview_kk',
             'cek_nik'
         );
+        $this->set_dpt_districts();
         $this->step = 1;
     }
 
@@ -410,5 +434,24 @@ class CreateFamily extends Component
             $this->reset('village', 'tps_');
         if ($region == 'village')
             $this->reset('tps_');
+    }
+
+    public function set_dpt_districts()
+    {
+        $this->dpt_districts = District::get();
+        $this->reset('dpt_district', 'dpt_village', 'dpt_tps');
+    }
+
+    public function set_dpt_villages()
+    {
+        $this->dpt_villages = Village::where('district_id', $this->dpt_district)->get();
+        $this->reset('dpt_village', 'dpt_tps');
+    }
+
+    public function set_dpt_tpses()
+    {
+        $this->dpt_tpses = Tps::whereHas('village', fn($q) => $q->where('id', $this->dpt_village)
+            ->where('district_id', $this->dpt_district))->get();
+        $this->reset('dpt_tps');
     }
 }

@@ -127,9 +127,8 @@ class Index extends Component
         $villages = Village::where('district_id', $this->district)
             ->get();
 
-        $tpses = Tps::whereHas('village', fn($q) => $q->where('district_id', $this->district))
-            ->where('village_id', $this->village)
-            ->get();
+        $tpses = Tps::whereHas('village', fn($q) => $q->where('id', $this->village)
+            ->where('district_id', $this->district))->get();
 
         $this->dispatchBrowserEvent('votersLoaded');
 

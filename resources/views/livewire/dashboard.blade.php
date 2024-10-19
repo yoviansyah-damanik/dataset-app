@@ -116,7 +116,7 @@
                             Total Pengguna
                         </div>
                         <div class="box-count">
-                            {{ $users_total }}
+                            {{ GeneralHelper::number_format($users_total) }}
                         </div>
                     </div>
                     <a class="stretched-link" href="{{ route('users') }}"></a>
@@ -132,7 +132,7 @@
                             Total Koordinator Kecamatan
                         </div>
                         <div class="box-count">
-                            {{ $coordinator_1_total }}
+                            {{ GeneralHelper::number_format($coordinator_1_total) }}
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                             Total Koordinator Kelurahan/Desa
                         </div>
                         <div class="box-count">
-                            {{ $coordinator_2_total }}
+                            {{ GeneralHelper::number_format($coordinator_2_total) }}
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                             Total Koordinator TPS
                         </div>
                         <div class="box-count">
-                            {{ $coordinator_3_total }}
+                            {{ GeneralHelper::number_format($coordinator_3_total) }}
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                             Total Tim Bersinar
                         </div>
                         <div class="box-count">
-                            {{ $coordinator_4_total }}
+                            {{ GeneralHelper::number_format($coordinator_4_total) }}
                         </div>
                     </div>
                 </div>
@@ -194,7 +194,7 @@
                             Total Kecamatan
                         </div>
                         <div class="box-count">
-                            {{ $districts_total }}
+                            {{ GeneralHelper::number_format($districts_total) }}
                         </div>
                     </div>
                     <a class="stretched-link" href="{{ route('region.district') }}"></a>
@@ -210,7 +210,7 @@
                             Total Kelurahan/Desa
                         </div>
                         <div class="box-count">
-                            {{ $villages_total }}
+                            {{ GeneralHelper::number_format($villages_total) }}
                         </div>
                     </div>
                     <a class="stretched-link" href="{{ route('region.village') }}"></a>
@@ -226,7 +226,7 @@
                             Total TPS
                         </div>
                         <div class="box-count">
-                            {{ $tpses_total }}
+                            {{ GeneralHelper::number_format($tpses_total) }}
                         </div>
                     </div>
                     <a class="stretched-link" href="{{ route('region.tps') }}"></a>

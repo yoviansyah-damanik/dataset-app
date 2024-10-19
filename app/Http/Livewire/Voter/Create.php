@@ -60,68 +60,49 @@ class Create extends Component
     public $search;
     public $remember = false;
 
-    public $districts,
-        $villages,
-        $tpses,
-        $district,
-        $village,
-        $tps_;
+    public $dpt_districts,
+        $dpt_villages,
+        $dpt_tpses,
+        $dpt_district,
+        $dpt_village,
+        $dpt_tps;
 
     public int $step = 1;
     public bool $is_empty = false;
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->set_dpt_districts();
+    }
 
     public function render()
     {
-        if ($this->step != 2)
-            $this->reset('districts', 'villages', 'tpses');
-
         if ($this->step == 1) {
             $this->data = Dpt::with('tps', 'village', 'district')->where('name', 'like', $this->search . '%')
                 ->whereDoesntHave('voter')
-                ->when(
-                    auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                )
                 ->when(
                     $this->remember,
                     fn($q) => $q->where('district_id', $this->kecamatan)
                         ->where('village_id', $this->kelurahan)
                         ->where('tps_id', $this->tps),
+                    fn($q) => $q->when(
+                        $this->dpt_district,
+                        fn($r) => $r->where('district_id', $this->dpt_district)
+                            ->when(
+                                $this->dpt_village,
+                                fn($s) => $s->where('village_id', $this->dpt_village)
+                                    ->when(
+                                        $this->dpt_tps,
+                                        fn($t) => $t->where('tps_id', $this->dpt_tps)
+                                    )
+                            )
+                    )
                 )
-                ->limit(50)
+                ->limit(20)
                 ->get();
         }
 
         if ($this->step == 2) {
-            // if (auth()->user()->role_name == 'Superadmin') {
-            //     $this->districts = District::get();
-
-            //     if (!$this->district)
-            //         $this->district = $this->districts->first()->id;
-
-            //     $this->villages = Village::when(
-            //         $this->district,
-            //         fn($q) => $q->where('district_id', $this->district),
-            //         fn($q) => $q->whereNull('id')
-            //     )
-            //         ->get();
-
-            //     if (!$this->village)
-            //         $this->village = $this->villages->first()->id;
-
-            //     $this->tpses = Tps::when(
-            //         $this->village,
-            //         fn($q) => $q->where('village_id', $this->village),
-            //         fn($q) => $q->whereNull('id')
-            //     )
-            //         ->get();
-
-            //     if (!$this->tps_)
-            //         $this->tps_ = $this->tpses->first()->id;
-            // }
-
             $this->data = User::with('voters_by_team', 'district', 'village', 'tps', 'roles')
                 ->withCount('voters_by_team')
                 ->role('Tim Bersinar')
@@ -203,6 +184,7 @@ class Create extends Component
                 $this->check_nik();
                 $this->reset('valid_message');
 
+                $this->reset('dpt_districts', 'dpt_district', 'dpt_villages', 'dpt_village', 'dpt_tpses', 'dpt_tps');
                 if ($this->remember) {
                     $this->set_init();
                     $this->step = 6;
@@ -395,7 +377,7 @@ class Create extends Component
         $this->nama = $this->dpt->name;
         $this->jenis_kelamin = $this->dpt->genderFull;
 
-        $this->reset('districts', 'villages', 'tpses', 'data');
+        $this->reset('data');
     }
 
     public function check_nik()
@@ -431,6 +413,7 @@ class Create extends Component
     {
         $this->reset();
         $this->resetValidation();
+        $this->set_dpt_districts();
         $this->step = 1;
     }
 
@@ -465,8 +448,9 @@ class Create extends Component
             'no_telp',
             'preview_ktp',
             'preview_kk',
-            'cek_nik'
+            'cek_nik',
         );
+        $this->set_dpt_districts();
         $this->step = 1;
     }
 
@@ -509,5 +493,29 @@ class Create extends Component
             $this->reset('village', 'tps_');
         if ($region == 'village')
             $this->reset('tps_');
+    }
+
+    public function set_dpt_districts()
+    {
+        $this->dpt_districts = District::get();
+        $this->reset('dpt_district', 'dpt_village', 'dpt_tps');
+
+        if (auth()->user()->role_name != 'Superadmin') {
+            $this->dpt_district = auth()->user()->district_id;
+            $this->set_dpt_villages();
+        }
+    }
+
+    public function set_dpt_villages()
+    {
+        $this->dpt_villages = Village::where('district_id', $this->dpt_district)->get();
+        $this->reset('dpt_village', 'dpt_tps');
+    }
+
+    public function set_dpt_tpses()
+    {
+        $this->dpt_tpses = Tps::whereHas('village', fn($q) => $q->where('id', $this->dpt_village)
+            ->where('district_id', $this->dpt_district))->get();
+        $this->reset('dpt_tps');
     }
 }
