@@ -106,7 +106,8 @@
                     </tr>
                     <tr>
                         <th>Tempat Lahir</th>
-                        {{ $voter->place_of_birth ?: '-' }}
+                        <td>
+                            {{ $voter->place_of_birth ?: '-' }}
                         </td>
                     </tr>
                     <tr>
