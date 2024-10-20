@@ -30,7 +30,8 @@ class Create extends Component
         $nama,
         $alamat,
         $tempat_lahir,
-        $tanggal_lahir,
+        // $tanggal_lahir,
+        $umur,
         $jenis_kelamin,
         $rt,
         $rw,
@@ -229,8 +230,9 @@ class Create extends Component
             'nik' => 'required|numeric|unique:voters,nik|digits:16',
             'nama' => 'required|string|max:255',
             'alamat' => 'nullable|string|max:255',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date_format:d/m/Y',
+            'tempat_lahir' => 'nullable|string',
+            // 'tanggal_lahir' => 'required|date_format:d/m/Y',
+            'umur' => 'required|numeric',
             'jenis_kelamin' => [
                 'required',
                 Rule::in(["Laki-laki", "Perempuan"])
@@ -287,8 +289,9 @@ class Create extends Component
             $new_voter->nik = $this->nik;
             $new_voter->address = $this->alamat ?? null;
             $new_voter->place_of_birth = $this->tempat_lahir;
-            $new_voter->date_of_birth = \Carbon\Carbon::createFromFormat('d/m/Y', $this->tanggal_lahir)->format('Y-m-d');
+            // $new_voter->date_of_birth = \Carbon\Carbon::createFromFormat('d/m/Y', $this->tanggal_lahir)->format('Y-m-d');
             $new_voter->gender = $this->jenis_kelamin;
+            $new_voter->age = $this->umur;
             $new_voter->rt = sprintf('%02d', $this->rt) ?? 0;
             $new_voter->rw = sprintf('%02d', $this->rw) ?? 0;
             $new_voter->district_id = $this->kecamatan;
@@ -435,7 +438,8 @@ class Create extends Component
             'nama',
             'alamat',
             'tempat_lahir',
-            'tanggal_lahir',
+            // 'tanggal_lahir',
+            'umur',
             'jenis_kelamin',
             'rt',
             'rw',
@@ -461,6 +465,7 @@ class Create extends Component
         $this->alamat = $dpt->address;
         $this->rt = $dpt->rt;
         $this->rw = $dpt->rw;
+        $this->umur = $dpt->age;
     }
 
     public function set_district_coor(User $user)

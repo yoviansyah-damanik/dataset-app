@@ -102,22 +102,22 @@ class User extends Authenticatable
                 return Voter::where('district_id', $this->district_id)
                     ->count();
             case "Administrator Keluarga":
-                return Voter::where('family_coor_id', auth()->user()->id)
+                return Voter::whereHas('dpt')
                     ->count();
             case "Koordinator Kecamatan":
                 return Voter::where('district_id', $this->district_id)
-                    ->orWhere('district_coor_id', auth()->user()->id)
+                    ->orWhere('district_coor_id', $this->id)
                     ->count();
             case "Koordinator Kelurahan/Desa":
                 return Voter::where(fn($q) => $q->where('district_id', $this->district_id)
                     ->where('village_id', $this->village_id))
-                    ->orWhere('village_coor_id', auth()->user()->id)
+                    ->orWhere('village_coor_id', $this->id)
                     ->count();
             case "Koordinator TPS":
                 return Voter::where(fn($q) => $q->where('district_id', $this->district_id)
                     ->where('village_id', $this->village_id)
                     ->where('tps_id', $this->tps_id))
-                    ->orWhere('tps_coor_id', auth()->user()->id)
+                    ->orWhere('tps_coor_id', $this->id)
                     ->count();
             case "Tim Bersinar":
                 return Voter::where('team_id', $this->id)

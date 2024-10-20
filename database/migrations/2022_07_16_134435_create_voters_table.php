@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('nik')->unique();
             $table->string('name');
             $table->text('address');
-            $table->string('place_of_birth');
-            $table->date('date_of_birth');
+            $table->string('place_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->integer('age')->default(0);
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('rt')->default(0);
             $table->string('rw')->default(0);

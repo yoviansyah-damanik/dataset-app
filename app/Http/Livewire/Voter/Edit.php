@@ -28,7 +28,8 @@ class Edit extends Component
         $nama,
         $alamat,
         $tempat_lahir,
-        $tanggal_lahir,
+        // $tanggal_lahir,
+        $umur,
         $jenis_kelamin,
         $rt,
         $rw,
@@ -52,11 +53,13 @@ class Edit extends Component
 
     public $districts,
         $villages,
-        $tps_,
+        $tpses,
         $religions,
         $marital_statuses,
         $professions,
         $nasionalities;
+
+    public $type;
 
     public bool $is_empty = true;
 
@@ -67,6 +70,7 @@ class Edit extends Component
 
         $this->set_init();
 
+        $this->type = $voter->family_coor_id ? 'family' : 'team';
         $this->old_voter = $voter;
         $this->id_voter = $voter->id;
         $this->currentNik = $voter->nik;
@@ -74,13 +78,12 @@ class Edit extends Component
         $this->nama = $voter->name;
         $this->alamat = $voter->address;
         $this->tempat_lahir = $voter->place_of_birth;
-        $this->tanggal_lahir = $voter->date_of_birth->format('Y-m-d');
+        // $this->tanggal_lahir = $voter->date_of_birth->format('Y-m-d');
+        $this->umur = $voter->age;
         $this->jenis_kelamin = $voter->gender;
         $this->rt = $voter->rt;
         $this->rw = $voter->rw;
-        $this->kecamatan = $voter->district_id;
-        $this->kelurahan = $voter->village_id;
-        $this->tps = $voter->tps_id;
+
         $this->agama = $voter->religion_id;
         $this->status_perkawinan = $voter->marital_status_id;
         $this->pekerjaan = $voter->profession_id;
@@ -95,6 +98,13 @@ class Edit extends Component
         }
         $this->no_telp = $voter->phone_number;
 
+        if ($this->type == 'family') {
+            $this->kecamatan = $voter->district_id;
+            $this->kelurahan = $voter->village_id;
+            $this->tps = $voter->tps_id;
+            $this->set_districts(true);
+        }
+
         // $this->dispatchBrowserEvent('reloadAdditionalInput');
     }
 
@@ -108,21 +118,7 @@ class Edit extends Component
         $this->professions = Profession::get();
         $this->nasionalities = Nasionality::get();
 
-        // $this->dispatchBrowserEvent('reloadDistrict', ['is_empty' => true]);
         $this->dispatchBrowserEvent('reloadAdditionalInput');
-
-        // $this->dispatchBrowserEvent('setRegionData', [
-        //     'district_id' => $this->kecamatan,
-        //     'village_id' => $this->kelurahan,
-        //     'tps_id' => $this->tps,
-        // ]);
-
-        // $this->dispatchBrowserEvent('setAdditionalData', [
-        //     'religion_id' => $this->agama,
-        //     'marital_status_id' => $this->status_perkawinan,
-        //     'profession_id' => $this->pekerjaan,
-        //     'nasionality_id' => $this->kewarganegaraan,
-        // ]);
     }
 
     public function render()
@@ -136,26 +132,31 @@ class Edit extends Component
             'nik' => ['required', 'numeric', 'digits:16', Rule::unique('voters')->ignore($this->currentNik, 'nik')],
             'nama' => 'required|string|max:255',
             'alamat' => 'nullable|string',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date',
+            'tempat_lahir' => 'nullable|string',
+            // 'tanggal_lahir' => 'required|date_format:d/m/Y',
+            'umur' => 'required|numeric',
             'jenis_kelamin' => [
                 'required',
                 Rule::in(["Laki-laki", "Perempuan"])
             ],
             'rt' => 'nullable|string',
             'rw' => 'nullable|string',
-            'kecamatan' => 'required|numeric|exists:districts,id',
+            'kecamatan' => [
+                'numeric',
+                'exists:districts,id',
+                Rule::requiredIf($this->type == 'family'),
+            ],
             'kelurahan' => [
-                'required',
                 'numeric',
                 'exists:villages,id',
-                Rule::in(Village::where('district_id', $this->kecamatan)->get()->pluck('id'))
+                Rule::in(Village::where('district_id', $this->kecamatan)->get()->pluck('id')),
+                Rule::requiredIf($this->type == 'family'),
             ],
             'tps' => [
-                'required',
                 'numeric',
                 'exists:tps,id',
-                Rule::in(Tps::where('village_id', $this->kelurahan)->get()->pluck('id'))
+                Rule::in(Tps::where('village_id', $this->kelurahan)->get()->pluck('id')),
+                Rule::requiredIf($this->type == 'family'),
             ],
             'agama' => [
                 'required',
@@ -226,13 +227,16 @@ class Edit extends Component
             // $new_voter->nik = $this->nik;
             $new_voter->address = $this->alamat;
             $new_voter->place_of_birth = $this->tempat_lahir;
-            $new_voter->date_of_birth = $this->tanggal_lahir;
+            // $new_voter->date_of_birth = $this->tanggal_lahir;
+            $new_voter->age = $this->umur;
             $new_voter->gender = $this->jenis_kelamin;
             $new_voter->rt = sprintf('%02d', $this->rt) ?? 0;
             $new_voter->rw = sprintf('%02d', $this->rw) ?? 0;
-            $new_voter->district_id = $this->kecamatan;
-            $new_voter->village_id = $this->kelurahan;
-            $new_voter->tps_id = $this->tps;
+            if ($this->type == 'family') {
+                $new_voter->district_id = $this->kecamatan;
+                $new_voter->village_id = $this->kelurahan;
+                $new_voter->tps_id = $this->tps;
+            }
             $new_voter->religion_id = $this->agama;
             $new_voter->marital_status_id = $this->status_perkawinan;
             $new_voter->profession_id = $this->pekerjaan;
@@ -246,5 +250,38 @@ class Edit extends Component
         } catch (\Exception $e) {
             $this->alert('error', $e->getMessage());
         }
+    }
+
+    public function set_districts($init = false)
+    {
+        $this->districts = District::get();
+        $this->kecamatan = $this->districts
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->kecamatan)
+            )->first()->id;
+
+        $this->set_villages($init);
+    }
+
+    public function set_villages($init = false)
+    {
+        $this->villages = Village::where('district_id', $this->kecamatan)->get();
+        $this->kelurahan = $this->villages
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->kelurahan)
+            )->first()->id;
+        $this->set_tpses($init);
+    }
+
+    public function set_tpses($init = false)
+    {
+        $this->tpses = Tps::where('village_id', $this->kelurahan)->get();
+        $this->tps = $this->tpses
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->tps)
+            )->first()->id;
     }
 }

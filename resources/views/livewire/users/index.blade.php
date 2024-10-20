@@ -18,7 +18,7 @@
                 <div class="input-group-text">
                     <i class="fas fa-search"></i>
                 </div>
-                <input type="text" wire:model="s" class="form-control" style="min-width:350px;"
+                <input type="search" wire:model="s" class="form-control" style="min-width:350px;"
                     placeholder="Cari berdasarkan nama pengguna atau nama lengkap...">
             </div>
         </div>

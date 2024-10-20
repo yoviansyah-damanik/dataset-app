@@ -74,15 +74,23 @@ class Dashboard extends Component
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
             ->get()
@@ -100,15 +108,23 @@ class Dashboard extends Component
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
             ->get()
@@ -126,15 +142,23 @@ class Dashboard extends Component
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
             ->get()
@@ -152,15 +176,23 @@ class Dashboard extends Component
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
             ->get()
@@ -178,15 +210,23 @@ class Dashboard extends Component
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
             ->get()
@@ -196,112 +236,153 @@ class Dashboard extends Component
             ])
             ->toArray();
 
-        $start = Carbon::now()->subYears(25);
-        $end = Carbon::now()->subYears(17);
+        $start = 17;
+        $end =  25;
         $age_17_25 = Voter::selectRaw('count(id) as total_voters')
             ->when(
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
-            ->whereDate('date_of_birth', '>=', $start)
-            ->whereDate('date_of_birth', '<=', $end)
+            ->where('age', '>=', $start)
+            ->where('age', '<=', $end)
             ->first()->total_voters;
 
-        $start = Carbon::now()->subYears(35);
-        $end = Carbon::now()->subYears(25);
+        $start = 25;
+        $end =  35;
+
         $age_25_35 = Voter::selectRaw('count(id) as total_voters')
             ->when(
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
-            ->whereDate('date_of_birth', '>=', $start)
-            ->whereDate('date_of_birth', '<=', $end)
+            ->where('age', '>=', $start)
+            ->where('age', '<=', $end)
             ->first()->total_voters;
 
-        $start = Carbon::now()->subYears(45);
-        $end = Carbon::now()->subYears(35);
+        $start = 35;
+        $end =  45;
         $age_35_45 = Voter::selectRaw('count(id) as total_voters')
             ->when(
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
-            ->whereDate('date_of_birth', '>=', $start)
-            ->whereDate('date_of_birth', '<=', $end)
+            ->where('age', '>=', $start)
+            ->where('age', '<=', $end)
             ->first()->total_voters;
 
-        $start = Carbon::now()->subYears(55);
-        $end = Carbon::now()->subYears(45);
+        $start = 45;
+        $end =  55;
         $age_45_55 = Voter::selectRaw('count(id) as total_voters')
             ->when(
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
-            ->whereDate('date_of_birth', '>=', $start)
-            ->whereDate('date_of_birth', '<=', $end)
+            ->where('age', '>=', $start)
+            ->where('age', '<=', $end)
             ->first()->total_voters;
 
-        $end = Carbon::now()->subYears(55);
+        $end = 55;
         $age_55_up = Voter::selectRaw('count(id) as total_voters')
             ->when(
                 $this->view == 'user',
                 fn($viewQuery) => $viewQuery->when(
                     auth()->user()->role_name != 'Superadmin',
-                    fn($q) => $q->where('district_id', auth()->user()->district_id)
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
-                            fn($q) => $q->where('village_id', auth()->user()->village_id)
-                        )
-                        ->when(
-                            !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
-                            fn($q) => $q->where('tps_id', auth()->user()->tps_id)
-                        )
+                    fn($q) => $q->when(
+                        in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']),
+                        fn($r) => $r->when(
+                            auth()->user()->role_name == 'Administrator Keluarga',
+                            fn($s) => $s->whereNotNull('family_coor_id'),
+                            fn($s) => $s->where('family_coor_id', auth()->user()->id)
+                        ),
+                        fn($r) => $r->where('district_id', auth()->user()->district_id)
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan']),
+                                fn($s) => $s->where('village_id', auth()->user()->village_id)
+                            )
+                            ->when(
+                                !in_array(auth()->user()->role_name, ['Administrator', 'Koordinator Kecamatan', 'Koordinator Kelurahan/Desa']),
+                                fn($s) => $s->where('tps_id', auth()->user()->tps_id)
+                            )
+                    )
                 )
             )
-            ->whereDate('date_of_birth', '<=', $end)
+            ->where('age', '<=', $end)
             ->first()->total_voters;
 
 

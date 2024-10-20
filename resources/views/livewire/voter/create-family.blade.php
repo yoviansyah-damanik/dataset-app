@@ -401,7 +401,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group mb-3 position-relative">
-                            <label for="tempat_lahir" class="form-label label-important">Tempat Lahir</label>
+                            <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
                             <input type="text" autocomplete="off"
                                 class="form-control @error('tempat_lahir') is-invalid @enderror" autofocus
                                 id="tempat_lahir" wire:model.defer="tempat_lahir">
@@ -413,12 +413,23 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group mb-3 position-relative">
+                        {{-- <div class="form-group mb-3 position-relative">
                             <label for="tanggal_lahir" class="form-label label-important">Tanggal Lahir</label>
                             <input type="text" autocomplete="off" placeholder="dd/mm/yyyy"
                                 class="form-control @error('tanggal_lahir') is-invalid @enderror" id="date"
                                 wire:model.defer="tanggal_lahir">
                             @error('tanggal_lahir')
+                                <div class="invalid-tooltip">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div> --}}
+                        <div class="form-group mb-3 position-relative">
+                            <label for="umur" class="form-label label-important">Umur</label>
+                            <input type="number" autocomplete="off"
+                                class="form-control @error('umur') is-invalid @enderror" id="date"
+                                wire:model="umur">
+                            @error('umur')
                                 <div class="invalid-tooltip">
                                     {{ $message }}
                                 </div>

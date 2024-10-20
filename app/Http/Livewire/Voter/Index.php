@@ -58,32 +58,32 @@ class Index extends Component
                 $q->where('gender', 'Perempuan');
             })
             ->when($this->filter == 'age-1', function ($q) {
-                $start = Carbon::now()->subYears(25);
-                $end = Carbon::now()->subYears(17);
-                $q->whereDate('date_of_birth', '>=', $start)
-                    ->whereDate('date_of_birth', '<=', $end);
+                $start = 17;
+                $end = 25;
+                $q->where('age', '>=', $start)
+                    ->where('age', '<=', $end);
             })
             ->when($this->filter == 'age-2', function ($q) {
-                $start = Carbon::now()->subYears(35);
-                $end = Carbon::now()->subYears(25);
-                $q->whereDate('date_of_birth', '>=', $start)
-                    ->whereDate('date_of_birth', '<=', $end);
+                $start = 25;
+                $end = 35;
+                $q->where('age', '>=', $start)
+                    ->where('age', '<=', $end);
             })
             ->when($this->filter == 'age-3', function ($q) {
-                $start = Carbon::now()->subYears(45);
-                $end = Carbon::now()->subYears(35);
-                $q->whereDate('date_of_birth', '>=', $start)
-                    ->whereDate('date_of_birth', '<=', $end);
+                $start = 35;
+                $end = 45;
+                $q->where('age', '>=', $start)
+                    ->where('age', '<=', $end);
             })
             ->when($this->filter == 'age-4', function ($q) {
-                $start = Carbon::now()->subYears(55);
-                $end = Carbon::now()->subYears(45);
-                $q->whereDate('date_of_birth', '>=', $start)
-                    ->whereDate('date_of_birth', '<=', $end);
+                $start = 45;
+                $end = 55;
+                $q->where('age', '>=', $start)
+                    ->where('age', '<=', $end);
             })
             ->when($this->filter == 'age-5', function ($q) {
-                $end = Carbon::now()->subYears(55);
-                $q->whereDate('date_of_birth', '<=', $end);
+                $end = 55;
+                $q->where('age', '<=', $end);
             })
             ->when($this->filter == 'file-1', function ($q) {
                 $q->whereNotNull('ktp');
@@ -105,8 +105,8 @@ class Index extends Component
                 $q->whereNull('kk')
                     ->whereNull('ktp');
             })
-            ->when($this->sortBy == 'sortBy-1', fn($q) => $q->orderBy('date_of_birth', 'desc'))
-            ->when($this->sortBy == 'sortBy-2', fn($q) => $q->orderBy('date_of_birth', 'asc'))
+            ->when($this->sortBy == 'sortBy-1', fn($q) => $q->orderBy('age', 'desc'))
+            ->when($this->sortBy == 'sortBy-2', fn($q) => $q->orderBy('age', 'asc'))
             ->when($this->sortBy == 'sortBy-3', fn($q) => $q->orderBy('name', 'asc'))
             ->when($this->sortBy == 'sortBy-4', fn($q) => $q->orderBy('name', 'desc'))
             ->when($this->sortBy == 'sortBy-5', fn($q) => $q->orderBy('created_at', 'desc'))
@@ -116,7 +116,14 @@ class Index extends Component
             ->when($this->district, fn($q) => $q->where('district_id', $this->district))
             ->when($this->village, fn($q) => $q->where('village_id', $this->village))
             ->when($this->tps, fn($q) => $q->where('tps_id', $this->tps))
-            ->when(in_array(auth()->user()->role_name, ['Administrator Keluarga', 'Koordinator Keluarga']), fn($q) => $q->where('family_coor_id', auth()->user()->id))
+            ->when(
+                in_array(auth()->user()->role_name, ['Administrator Keluarga', 'Koordinator Keluarga']),
+                fn($q) => $q->when(
+                    auth()->user()->role_name == 'Administrator Keluarga',
+                    fn($r) => $r->whereNotNull('family_coor_id'),
+                    fn($r) => $r->where('family_coor_id', auth()->user()->id)
+                )
+            )
             ->paginate($this->per_page);
 
         if (!$voters)

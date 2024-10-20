@@ -105,9 +105,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Tempat, Tgl Lahir</th>
-                        <td>{{ $voter->place_of_birth . ', ' . $voter->date_of_birth->translatedFormat('d F Y') }}
-                            ({{ $voter->umur }})
+                        <th>Tempat Lahir</th>
+                        {{ $voter->place_of_birth ?: '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Umur</th>
+                        <td>
+                            {{ $voter->age }} Tahun
                         </td>
                     </tr>
                     <tr>
@@ -233,7 +238,7 @@
                     </tr>
                     <tr>
                         <th>Terakhir diperbaharui</th>
-                        <td>{{ $voter->updated_at->format('d M Y H:i:s') }}
+                        <td>{{ $voter->updated_at->translatedFormat('d M Y H:i:s') }}
                         </td>
                     </tr>
                 </table>

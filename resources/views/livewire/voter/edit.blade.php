@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mb-3 position-relative">
-                        <label for="tempat_lahir" class="form-label label-important">Tempat Lahir</label>
+                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
                         <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
                             id="tempat_lahir" wire:model.lazy="tempat_lahir">
                         @error('tempat_lahir')
@@ -104,11 +104,21 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group mb-3 position-relative">
+                    {{-- <div class="form-group mb-3 position-relative">
                         <label for="tanggal_lahir" class="form-label label-important">Tanggal Lahir</label>
                         <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
                             id="date" wire:model.lazy="tanggal_lahir">
                         @error('tanggal_lahir')
+                            <div class="invalid-tooltip">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div> --}}
+                    <div class="form-group mb-3 position-relative">
+                        <label for="umur" class="form-label label-important">Umur</label>
+                        <input type="number" autocomplete="off"
+                            class="form-control @error('umur') is-invalid @enderror" id="date" wire:model="umur">
+                        @error('umur')
                             <div class="invalid-tooltip">
                                 {{ $message }}
                             </div>
@@ -132,8 +142,8 @@
                 <div class="col-lg-8">
                     <div class="form-group mb-3 position-relative">
                         <label for="alamat" class="form-label">Alamat</label>
-                        <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat"
-                            wire:model.lazy="alamat" />
+                        <input type="text" class="form-control @error('alamat') is-invalid @enderror"
+                            id="alamat" wire:model.lazy="alamat" />
                         @error('alamat')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -165,70 +175,73 @@
                         @enderror
                     </div>
                 </div>
-                {{-- <div class="col-lg-2 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="kecamatan" class="form-label">Kecamatan</label>
-                        <select wire:model="kecamatan" id="district_id"
-                            class="form-select @error('kecamatan') is-invalid @enderror"
-                            @disabled(!in_array(auth()->user()->role_name, ['Superadmin', 'Administrator']))>
-                            @foreach ($districts as $district)
-                                <option value="{{ $district->id }}">{{ $district->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('kecamatan')
-                            <div class="invalid-tooltip">
-                                {{ $message }}
+                @if ($type == 'family')
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3 position-relative">
+                            <div class="form-group">
+                                <label for="kecamatan" class="form-label label-important">Kecamatan</label>
+                                <select id="kecamatan" class="form-select @error('kecamatan') is-invalid @enderror"
+                                    wire:model="kecamatan" wire:change="set_villages">
+                                    @foreach ($districts as $district)
+                                        <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        @enderror
+                            @error('kecamatan')
+                                <div class="invalid-tooltip">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="kelurahan" class="form-label">Kelurahan</label>
-                        <select wire:model="kelurahan" id="village_id"
-                            class="form-select @error('kelurahan') is-invalid @enderror"
-                            @disabled(!in_array(auth()->user()->role_name, ['Superadmin', 'Administrator', 'Koordinator Kecamatan']))>
-                            @foreach ($villages as $village)
-                                <option value="{{ $village->id }}">{{ $village->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('kelurahan')
-                            <div class="invalid-tooltip">
-                                {{ $message }}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3 position-relative">
+                            <div class="form-group">
+                                <label for="kelurahan" class="form-label label-important">Kelurahan/Desa</label>
+                                <select id="kelurahan" class="form-select @error('kelurahan') is-invalid @enderror"
+                                    wire:model="kelurahan" wire:change="set_tpses">
+                                    @foreach ($villages as $village)
+                                        <option value="{{ $village->id }}">{{ $village->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        @enderror
+                            @error('kelurahan')
+                                <div class="invalid-tooltip">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="tps" class="form-label">TPS</label>
-                        <select wire:model="tps" id="tps_id"
-                            class="form-select @error('tps') is-invalid @enderror" @disabled(
-                                !in_array(auth()->user()->role_name, [
-                                    'Superadmin',
-                                    'Administrator',
-                                    'Koordinator Kecamatan',
-                                    'Koordinator Kelurahan/Desa',
-                                ]))>
-                            @foreach ($tps_ as $tps__)
-                                <option value="{{ $tps__->id }}">{{ $tps__->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('tps')
-                            <div class="invalid-tooltip">
-                                {{ $message }}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3 position-relative">
+                            <div class="form-group">
+                                <label for="tps" class="form-label label-important">TPS</label>
+                                <select id="tps" class="form-select @error('tps') is-invalid @enderror"
+                                    wire:model="tps">
+                                    @foreach ($tpses as $tps)
+                                        <option value="{{ $tps->id }}">{{ $tps->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        @enderror
+                            @error('tps')
+                                <div class="invalid-tooltip">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
-                </div> --}}
+                @endif
                 <div class="col-lg-3 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="agama" class="form-label label-important">Agama</label>
-                        <select id="religion_id" class="form-select @error('agama') is-invalid @enderror">
-                            @foreach ($religions as $religion)
-                                <option value="{{ $religion->id }}">{{ $religion->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-3 position-relative">
+                        <div class="form-group">
+                            <label for="agama" class="form-label label-important">Agama</label>
+                            <select id="religion_id" class="form-select @error('agama') is-invalid @enderror"
+                                wire:model="agama">
+                                @foreach ($religions as $religion)
+                                    <option value="{{ $religion->id }}">{{ $religion->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('agama')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -237,14 +250,19 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="status_perkawinan" class="form-label label-important">Status Perkawinan</label>
-                        <select id="marital_status_id"
-                            class="form-select @error('status_perkawinan') is-invalid @enderror">
-                            @foreach ($marital_statuses as $marital_status)
-                                <option value="{{ $marital_status->id }}">{{ $marital_status->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-3 position-relative">
+                        <div class="form-group">
+                            <label for="status_perkawinan" class="form-label label-important">Status
+                                Perkawinan</label>
+                            <select id="marital_status_id"
+                                class="form-select @error('status_perkawinan') is-invalid @enderror"
+                                wire:model="status_perkawinan">
+                                @foreach ($marital_statuses as $marital_status)
+                                    <option value="{{ $marital_status->id }}">{{ $marital_status->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('status_perkawinan')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -253,13 +271,16 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="pekerjaan" class="form-label label-important">Pekerjaan</label>
-                        <select id="profession_id" class="form-select @error('pekerjaan') is-invalid @enderror">
-                            @foreach ($professions as $profession)
-                                <option value="{{ $profession->id }}">{{ $profession->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-3 position-relative">
+                        <div class="form-group">
+                            <label for="pekerjaan" class="form-label label-important">Pekerjaan</label>
+                            <select id="profession_id" class="form-select @error('pekerjaan') is-invalid @enderror"
+                                wire:model="pekerjaan">
+                                @foreach ($professions as $profession)
+                                    <option value="{{ $profession->id }}">{{ $profession->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('pekerjaan')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -268,14 +289,17 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="form-group mb-3 position-relative" wire:ignore>
-                        <label for="kewarganegaraan" class="form-label label-important">Kewarganegaraan</label>
-                        <select id="nasionality_id"
-                            class="form-select @error('kewarganegaraan') is-invalid @enderror">
-                            @foreach ($nasionalities as $nasionality)
-                                <option value="{{ $nasionality->id }}">{{ $nasionality->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-3 position-relative">
+                        <div class="form-group">
+                            <label for="kewarganegaraan" class="form-label label-important">Kewarganegaraan</label>
+                            <select id="nasionality_id"
+                                class="form-select @error('kewarganegaraan') is-invalid @enderror"
+                                wire:model="kewarganegaraan">
+                                @foreach ($nasionalities as $nasionality)
+                                    <option value="{{ $nasionality->id }}">{{ $nasionality->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('kewarganegaraan')
                             <div class="invalid-tooltip">
                                 {{ $message }}
@@ -409,61 +433,3 @@
         </form>
     </div>
 </div>
-
-@push('scripts')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#religion_id').val(@this.get('agama'))
-            $('#marital_status_id').val(@this.get('status_perkawinan'))
-            $('#profession_id').val(@this.get('pekerjaan'))
-            $('#nasionality_id').val(@this.get('kewarganegaraan'))
-            setAdditionalInput()
-        })
-
-        function setAdditionalInput() {
-            $('#religion_id').select2({
-                placeholder: "Pilih Agama",
-                theme: "bootstrap-5",
-                language: "id",
-            });
-            $('#religion_id').on('change', function(e) {
-                let religion_id = $('#religion_id').select2("val");
-                $('#religion_id').removeClass('is-invalid');
-                @this.set('agama', religion_id);
-            });
-
-            $('#marital_status_id').select2({
-                placeholder: "Pilih Status Perkawinan",
-                theme: "bootstrap-5",
-                language: "id",
-            });
-            $('#marital_status_id').on('change', function(e) {
-                let marital_status_id = $('#marital_status_id').select2("val");
-                $('#marital_status_id').removeClass('is-invalid');
-                @this.set('status_perkawinan', marital_status_id);
-            });
-
-            $('#profession_id').select2({
-                placeholder: "Pilih Pekerjaan",
-                theme: "bootstrap-5",
-                language: "id",
-            });
-            $('#profession_id').on('change', function(e) {
-                let profession_id = $('#profession_id').select2("val");
-                $('#profession_id').removeClass('is-invalid');
-                @this.set('pekerjaan', profession_id);
-            });
-
-            $('#nasionality_id').select2({
-                placeholder: "Pilih Kewarganegaraan",
-                theme: "bootstrap-5",
-                language: "id",
-            });
-            $('#nasionality_id').on('change', function(e) {
-                let nasionality_id = $('#nasionality_id').select2("val");
-                $('#nasionality_id').removeClass('is-invalid');
-                @this.set('kewarganegaraan', nasionality_id);
-            });
-        }
-    </script>
-@endpush

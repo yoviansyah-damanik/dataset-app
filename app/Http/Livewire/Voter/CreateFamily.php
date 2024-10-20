@@ -30,7 +30,8 @@ class CreateFamily extends Component
         $nama,
         $alamat,
         $tempat_lahir,
-        $tanggal_lahir,
+        // $tanggal_lahir,
+        $umur,
         $jenis_kelamin,
         $rt,
         $rw,
@@ -128,24 +129,37 @@ class CreateFamily extends Component
             $this->preview_kk = $this->kk->temporaryUrl();
     }
 
-    public function set_districts()
+    public function set_districts($init = false)
     {
         $this->districts = District::get();
-        $this->kecamatan = $this->districts->where('id', $this->kecamatan)->first()->id;
-        $this->set_villages();
+        $this->kecamatan = $this->districts
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->kecamatan)
+            )->first()->id;
+
+        $this->set_villages($init);
     }
 
-    public function set_villages()
+    public function set_villages($init = false)
     {
         $this->villages = Village::where('district_id', $this->kecamatan)->get();
-        $this->kelurahan = $this->villages->where('id', $this->kelurahan)->first()->id;
-        $this->set_tpses();
+        $this->kelurahan = $this->villages
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->kelurahan)
+            )->first()->id;
+        $this->set_tpses($init);
     }
 
-    public function set_tpses()
+    public function set_tpses($init = false)
     {
         $this->tpses = Tps::where('village_id', $this->kelurahan)->get();
-        $this->tps = $this->tpses->where('id', $this->tps)->first()->id;
+        $this->tps = $this->tpses
+            ->when(
+                $init,
+                fn($q) => $q->where('id', $this->tps)
+            )->first()->id;
     }
 
     public function next_step()
@@ -190,8 +204,9 @@ class CreateFamily extends Component
             'nik' => 'required|numeric|unique:voters,nik|digits:16',
             'nama' => 'required|string|max:255',
             'alamat' => 'nullable|string|max:255',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date_format:d/m/Y',
+            'tempat_lahir' => 'nullable|string',
+            // 'tanggal_lahir' => 'required|date_format:d/m/Y',
+            'umur' => 'required|numeric',
             'jenis_kelamin' => [
                 'required',
                 Rule::in(["Laki-laki", "Perempuan"])
@@ -248,7 +263,8 @@ class CreateFamily extends Component
             $new_voter->nik = $this->nik;
             $new_voter->address = $this->alamat ?? null;
             $new_voter->place_of_birth = $this->tempat_lahir;
-            $new_voter->date_of_birth = \Carbon\Carbon::createFromFormat('d/m/Y', $this->tanggal_lahir)->format('Y-m-d');
+            // $new_voter->date_of_birth = \Carbon\Carbon::createFromFormat('d/m/Y', $this->tanggal_lahir)->format('Y-m-d');
+            $new_voter->age = $this->umur;
             $new_voter->gender = $this->jenis_kelamin;
             $new_voter->rt = sprintf('%02d', $this->rt) ?? 0;
             $new_voter->rw = sprintf('%02d', $this->rw) ?? 0;
@@ -333,7 +349,7 @@ class CreateFamily extends Component
         $this->nama = $this->dpt->name;
         $this->jenis_kelamin = $this->dpt->genderFull;
         $this->reset('districts', 'villages', 'tpses', 'data');
-        $this->set_districts();
+        $this->set_districts(true);
     }
 
     public function check_nik()
@@ -391,7 +407,8 @@ class CreateFamily extends Component
             'nama',
             'alamat',
             'tempat_lahir',
-            'tanggal_lahir',
+            // 'tanggal_lahir',
+            'umur',
             'jenis_kelamin',
             'rt',
             'rw',
@@ -421,6 +438,7 @@ class CreateFamily extends Component
         $this->alamat = $dpt->address;
         $this->rt = $dpt->rt;
         $this->rw = $dpt->rw;
+        $this->umur = $dpt->age;
     }
 
     public function set_family_coor(User $user)

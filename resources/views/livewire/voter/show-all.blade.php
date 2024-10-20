@@ -108,11 +108,10 @@
                                 <td>
                                     <div class="d-flex gap-1">
                                         <div class="fw-bold voter-table-width">
-                                            TTL
+                                            Umur
                                         </div>
                                         <div style="flex: 1 1 0%">
-                                            {{ $voter->place_of_birth . ', ' . $voter->date_of_birth->translatedFormat('d F Y') }}
-                                            ({{ $voter->umur }})
+                                            {{ $voter->age }} Tahun
                                         </div>
                                     </div>
                                     <div class="d-flex gap-1">
@@ -188,7 +187,7 @@
                                                         {{ $voter->family_coor->fullname }}
                                                     </a>
                                                 @else
-                                                    {{ $voter->created_by->fullname }}
+                                                    {{ $voter->family_coor->fullname }}
                                                 @endif
                                             </div>
                                         </div>
@@ -206,7 +205,7 @@
                                                         {{ $voter->team_by->fullname }}
                                                     </a>
                                                 @else
-                                                    {{ $voter->created_by->fullname }}
+                                                    {{ $voter->team_by->fullname }}
                                                 @endif
                                             </div>
                                         </div>
