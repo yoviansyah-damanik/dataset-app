@@ -833,7 +833,7 @@
                             labels: voters_label_data,
                         },
                         options: {
-                            indexAxis: 'y',
+                            indexAxis: 'x',
                             responsive: true,
                             maintainAspectRatio: false
                         }
