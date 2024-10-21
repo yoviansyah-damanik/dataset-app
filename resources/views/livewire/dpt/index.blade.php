@@ -104,6 +104,7 @@
                     <th>#</th>
                     <th>Nama DPT</th>
                     <th>Jenis Kelamin</th>
+                    <th>Umur</th>
                     <th>Alamat</th>
                     <th>TPS</th>
                     <th>Kelurahan</th>
@@ -121,6 +122,9 @@
                             </td>
                             <td>
                                 {{ $dpt->genderFull }}
+                            </td>
+                            <td class="text-center">
+                                {{ $dpt->age }}
                             </td>
                             <td>
                                 {{ $dpt->address }}, RT: {{ $dpt->rt }}, RW: {{ $dpt->rw }}
