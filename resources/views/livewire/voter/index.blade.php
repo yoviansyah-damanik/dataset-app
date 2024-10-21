@@ -41,32 +41,6 @@
                         </select>
                     </div>
                 </div>
-                {{-- <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
-                    <div class="input-group">
-                        <div class="input-group-text" id="year">
-                            <i class="fas fa-calendar"></i>
-                        </div>
-                        <select class="form-select" wire:model="year">
-                            <option value="semua">--Semua Tahun--</option>
-                            @for ($x = 2024; $x <= date('Y'); $x++)
-                                <option value={{ $x }}>{{ $x }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div> --}}
-                @role('Superadmin')
-                    <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
-                        <div class="input-group">
-                            <div class="input-group-text" id="year">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <select class="form-select" wire:model="view">
-                                <option value="user">Hanya Data Pengguna</option>
-                                <option value="admin">Data Keseluruhan</option>
-                            </select>
-                        </div>
-                    </div>
-                @endrole
                 <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
                     <div class="form-group">
                         <div class="input-group">
@@ -125,6 +99,20 @@
                         </div>
                     </div>
                 </div>
+                @if (!in_array(auth()->user()->role_name, ['Koordinator Keluarga', 'Administrator Keluarga']))
+                    <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
+                        <div class="input-group">
+                            <div class="input-group-text" id="btnGroupAddon3">
+                                <i class="fas fa-sort"></i>
+                            </div>
+                            <select class="form-select" wire:model="type">
+                                <option value="semua">--Semua Tim--</option>
+                                <option value="bersinar">Tim Bersinar</option>
+                                <option value="keluarga">Tim Keluarga</option>
+                            </select>
+                        </div>
+                    </div>
+                @endif
             </div>
             <div class="row mx-0 justify-content-end" style="width: 100%; max-width: 700px">
                 <div class="col-sm-12 px-0">

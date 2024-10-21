@@ -28,6 +28,7 @@ class Index extends Component
     public $sortBy;
     public $year = 'semua';
     public $view = 'user';
+    public $type = 'semua';
     public $district, $village, $tps;
 
     public function mount()
@@ -51,68 +52,78 @@ class Index extends Component
     {
         $voters = Voter::with('village', 'district', 'tps', 'religion', 'profession', 'marital_status', 'nasionality', 'created_by', 'team_by')
             ->whereEncrypted($this->attribute_search, 'like', "%$this->search%")
-            ->when($this->filter == 'gender-1', function ($q) {
-                $q->where('gender', 'Laki-laki');
-            })
-            ->when($this->filter == 'gender-2', function ($q) {
-                $q->where('gender', 'Perempuan');
-            })
-            ->when($this->filter == 'age-1', function ($q) {
-                $start = 17;
-                $end = 25;
-                $q->where('age', '>=', $start)
-                    ->where('age', '<=', $end);
-            })
-            ->when($this->filter == 'age-2', function ($q) {
-                $start = 25;
-                $end = 35;
-                $q->where('age', '>=', $start)
-                    ->where('age', '<=', $end);
-            })
-            ->when($this->filter == 'age-3', function ($q) {
-                $start = 35;
-                $end = 45;
-                $q->where('age', '>=', $start)
-                    ->where('age', '<=', $end);
-            })
-            ->when($this->filter == 'age-4', function ($q) {
-                $start = 45;
-                $end = 55;
-                $q->where('age', '>=', $start)
-                    ->where('age', '<=', $end);
-            })
-            ->when($this->filter == 'age-5', function ($q) {
-                $end = 55;
-                $q->where('age', '<=', $end);
-            })
-            ->when($this->filter == 'file-1', function ($q) {
-                $q->whereNotNull('ktp');
-            })
-            ->when($this->filter == 'file-2', function ($q) {
-                $q->whereNotNull('kk');
-            })
-            ->when($this->filter == 'file-3', function ($q) {
-                $q->whereNotNull('kk')
-                    ->whereNotNull('ktp');
-            })
-            ->when($this->filter == 'file-4', function ($q) {
-                $q->whereNull('ktp');
-            })
-            ->when($this->filter == 'file-5', function ($q) {
-                $q->whereNull('kk');
-            })
-            ->when($this->filter == 'file-6', function ($q) {
-                $q->whereNull('kk')
-                    ->whereNull('ktp');
-            })
-            ->when($this->sortBy == 'sortBy-1', fn($q) => $q->orderBy('age', 'desc'))
-            ->when($this->sortBy == 'sortBy-2', fn($q) => $q->orderBy('age', 'asc'))
-            ->when($this->sortBy == 'sortBy-3', fn($q) => $q->orderBy('name', 'asc'))
-            ->when($this->sortBy == 'sortBy-4', fn($q) => $q->orderBy('name', 'desc'))
-            ->when($this->sortBy == 'sortBy-5', fn($q) => $q->orderBy('created_at', 'desc'))
-            ->when($this->sortBy == 'sortBy-6', fn($q) => $q->orderBy('created_at', 'asc'))
-            // ->when($this->view === 'user', fn($q) => $q->where('user_id', Auth::user()->id))
-            // ->when($this->year !== 'semua', fn($q) => $q->where('year', $this->year))
+            ->when(
+                $this->filter,
+                fn($q) => $q->when($this->filter == 'gender-1', function ($r) {
+                    $r->where('gender', 'Laki-laki');
+                })
+                    ->when($this->filter == 'gender-2', function ($r) {
+                        $r->where('gender', 'Perempuan');
+                    })
+                    ->when($this->filter == 'age-1', function ($r) {
+                        $start = 17;
+                        $end = 25;
+                        $r->where('age', '>=', $start)
+                            ->where('age', '<=', $end);
+                    })
+                    ->when($this->filter == 'age-2', function ($r) {
+                        $start = 25;
+                        $end = 35;
+                        $r->where('age', '>=', $start)
+                            ->where('age', '<=', $end);
+                    })
+                    ->when($this->filter == 'age-3', function ($r) {
+                        $start = 35;
+                        $end = 45;
+                        $r->where('age', '>=', $start)
+                            ->where('age', '<=', $end);
+                    })
+                    ->when($this->filter == 'age-4', function ($r) {
+                        $start = 45;
+                        $end = 55;
+                        $r->where('age', '>=', $start)
+                            ->where('age', '<=', $end);
+                    })
+                    ->when($this->filter == 'age-5', function ($r) {
+                        $end = 55;
+                        $r->where('age', '<=', $end);
+                    })
+                    ->when($this->filter == 'file-1', function ($r) {
+                        $r->whereNotNull('ktp');
+                    })
+                    ->when($this->filter == 'file-2', function ($r) {
+                        $r->whereNotNull('kk');
+                    })
+                    ->when($this->filter == 'file-3', function ($r) {
+                        $r->whereNotNull('kk')
+                            ->whereNotNull('ktp');
+                    })
+                    ->when($this->filter == 'file-4', function ($r) {
+                        $r->whereNull('ktp');
+                    })
+                    ->when($this->filter == 'file-5', function ($r) {
+                        $r->whereNull('kk');
+                    })
+                    ->when($this->filter == 'file-6', function ($r) {
+                        $r->whereNull('kk')
+                            ->whereNull('ktp');
+                    })
+            )
+            ->when(
+                $this->sortBy,
+                fn($q) => $q->when($this->sortBy == 'sortBy-1', fn($r) => $r->orderBy('age', 'desc'))
+                    ->when($this->sortBy == 'sortBy-2', fn($r) => $r->orderBy('age', 'asc'))
+                    ->when($this->sortBy == 'sortBy-3', fn($r) => $r->orderBy('name', 'asc'))
+                    ->when($this->sortBy == 'sortBy-4', fn($r) => $r->orderBy('name', 'desc'))
+                    ->when($this->sortBy == 'sortBy-5', fn($r) => $r->orderBy('created_at', 'desc'))
+                    ->when($this->sortBy == 'sortBy-6', fn($r) => $r->orderBy('created_at', 'asc')),
+                fn($q) => $q->latest()
+            )
+            ->when($this->type != 'semua', fn($q) => $q->when(
+                $this->type == 'bersinar',
+                fn($r) => $r->whereHas('team_by'),
+                fn($r) => $r->whereHas('family_coor')
+            ))
             ->when($this->district, fn($q) => $q->where('district_id', $this->district))
             ->when($this->village, fn($q) => $q->where('village_id', $this->village))
             ->when($this->tps, fn($q) => $q->where('tps_id', $this->tps))
@@ -125,9 +136,6 @@ class Index extends Component
                 )
             )
             ->paginate($this->per_page);
-
-        if (!$voters)
-            $this->alert('warning', 'Tidak ada data ditemukan.');
 
         $districts = District::all();
 

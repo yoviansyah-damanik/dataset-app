@@ -29,34 +29,35 @@ class Coordinator implements ShouldQueue
     public function handle(): void
     {
         $data_added = new Collection();
-        User::withoutRole(['Superadmin', 'Administrator', 'Administrator Keluarga', 'Koordinator Keluarga'])
-            ->delete();
+        // User::withoutRole(['Superadmin', 'Administrator', 'Administrator Keluarga', 'Koordinator Keluarga'])
+        //     ->delete();
         // \Spatie\Permission\Models\Permission::truncate();
         // \Spatie\Permission\Models\Role::truncate();
         // START DISTRICT COOR
-        $file = fopen(resource_path() . "/files/koor kecamatan.csv", "r");
-        while (! feof($file)) {
-            $data = fgetcsv($file);
-            if ($data) {
-                $username = \Illuminate\Support\Str::of($data[1] . ' ' . $data[0])->lower()->snake()->value;
-                $payload = new Collection([
-                    'username' => $username,
-                    'fullname' => $data[1],
-                    'district' => "PADANGSIDIMPUAN $data[0]",
-                    'district_id' => District::where('name', "PADANGSIDIMPUAN $data[0]")->first()->id,
-                    'password' => bcrypt($username)
-                ]);
+        // $file = fopen(resource_path() . "/files/koor kecamatan.csv", "r");
+        // while (! feof($file)) {
+        //     $data = fgetcsv($file);
+        //     if ($data) {
+        //         $username = \Illuminate\Support\Str::of($data[1] . ' ' . $data[0])->lower()->snake()->value;
+        //         $payload = new Collection([
+        //             'username' => $username,
+        //             'fullname' => $data[1],
+        //             'district' => "PADANGSIDIMPUAN $data[0]",
+        //             'district_id' => District::where('name', "PADANGSIDIMPUAN $data[0]")->first()->id,
+        //             'password' => bcrypt($username)
+        //         ]);
 
-                \App\Models\User::create($payload->except('district')->toArray())->assignRole('Koordinator Kecamatan');
-                $data_added->push([...$payload, 'role' => 'Koordinator Kecamatan']);
-            }
-        }
-        fclose($file);
+        //         \App\Models\User::create($payload->except('district')->toArray())->assignRole('Koordinator Kecamatan');
+        //         $data_added->push([...$payload, 'role' => 'Koordinator Kecamatan']);
+        //     }
+        // }
+        // fclose($file);
 
         // START VILLAGE COOR, TPS COOR, TEAM
         $file1 = fopen(resource_path() . "/files/koor kelurahan, koor tps, tim bersinar.csv", "r");
         $file2 = fopen(resource_path() . "/files/koor kelurahan, koor tps, tim bersinar 2.csv", "r");
         $file3 = fopen(resource_path() . "/files/koor kelurahan, koor tps, tim bersinar 3.csv", "r");
+        $file4 = fopen(resource_path() . "/files/koor kelurahan, koor tps, tim bersinar 4.csv", "r");
         // 0 => Kode
         // 1 => Nama
         // 2 => Peran
@@ -64,7 +65,10 @@ class Coordinator implements ShouldQueue
         // 4 => Kelurahan
         // 5 => TPS
 
-        foreach (range(1, 3) as $x) {
+        $start = 4;
+        $end = 4;
+
+        foreach (range($start, $end) as $x) {
             while (! feof(${'file' . $x})) {
                 $data = fgetcsv(${'file' . $x});
                 if ($data) {
