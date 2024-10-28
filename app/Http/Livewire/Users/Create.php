@@ -216,7 +216,6 @@ class Create extends Component
     public function villages_data()
     {
         return Village::where('district_id', $this->district_id)
-            ->limit(10)
             ->get();
     }
 
@@ -224,7 +223,6 @@ class Create extends Component
     {
         return Tps::whereHas('village', fn($q) => $q->where('district_id', $this->district_id))
             ->where('village_id', $this->village_id)
-            ->limit(10)
             ->get();
     }
 
