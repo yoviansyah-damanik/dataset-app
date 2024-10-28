@@ -109,7 +109,7 @@ class Create extends Component
                 ->role('Tim Bersinar')
                 ->where('district_id', $this->dpt->district_id)
                 ->where('village_id', $this->dpt->village_id)
-                ->where('tps_id', $this->dpt->tps_id)
+                // ->where('tps_id', $this->dpt->tps_id)
                 ->whereEncrypted('fullname', 'like', "$this->search%")
                 ->limit(50)
                 ->get();
