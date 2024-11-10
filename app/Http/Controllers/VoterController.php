@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tps;
 use App\Models\Voter;
+use App\Models\Village;
+use App\Models\District;
+use App\Exports\VotersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -66,5 +71,23 @@ class VoterController extends Controller
 
         Alert::toast('Berhasil hapus data pemilih.', 'success');
         return redirect()->route('voters');
+    }
+
+    public function tes()
+    {
+        $team = '035109da-756a-40c1-8507-53ae409233ef';
+
+        Excel::store(new VotersExport(
+            team: $team
+        ), '/excel/tes.xlsx', 'public');
+
+        $result = Voter::with('dpt', 'dpt.tps')->where('team_id', $team)
+            ->get()
+            ->map(fn($voter) => [
+                'name' => $voter->name,
+                'tps' => $voter->dpt->tps->name
+            ]);
+
+        return $result;
     }
 }

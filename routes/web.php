@@ -24,6 +24,7 @@ use App\Http\Controllers\ConfigurationController;
 Route::get('/login', [AuthController::class, 'index'])->middleware('guest')->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('login.do');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/tes', [VoterController::class, 'tes']);
 
 Route::middleware('auth')
     ->group(

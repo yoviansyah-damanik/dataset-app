@@ -188,6 +188,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -215,6 +216,7 @@ return [
         'GeneralHelper' => App\Helpers\GeneralHelper::class,
         'SidebarHelper' => App\Helpers\SidebarHelper::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

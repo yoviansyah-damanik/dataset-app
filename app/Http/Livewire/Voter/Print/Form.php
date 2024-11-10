@@ -20,6 +20,7 @@ class Form extends Component
 
     public $jenis_laporan;
     public $district, $village, $tps, $team;
+    public $type = 'tim_bersinar';
     public $districts, $villages, $tpses, $teams;
     public $available_reports;
     public $all_districts = false;
@@ -72,10 +73,21 @@ class Form extends Component
 
     public function print()
     {
-        $district = $this->district === 'semua' ? 'Semua Kecamatan' : collect($this->districts)->firstWhere('id', $this->district)['text'];
-        $village = $this->village === 'semua' ? 'Semua Kelurahan/Desa' : collect($this->villages)->firstWhere('id', $this->village)['text'];
-        $tps = $this->tps === 'semua' ? 'Semua TPS' : collect($this->tpses)->firstWhere('id', $this->tps)['text'];
-        $team = $this->team === 'semua' ? 'Semua Tim Bersinar' : collect($this->team)->map(fn($team) => collect($this->teams)->firstWhere('id', $team)['text'])->toArray();
+        if (!$this->jenis_laporan) {
+            $this->alert('error', 'Silahkan pilih Jenis Laporan terlebih dahulu.');
+            return;
+        }
+        if ($this->jenis_laporan == 'counter') {
+            $district =  $this->all_districts
+                ? 'Semua Kecamatan'
+                : collect($this->district)->filter(fn($q) => $q)->map(fn($q) => collect($this->districts)->firstWhere('id', $q)['text'])->join(', ');
+            $this->district = collect($this->district)->filter(fn($q) => $q)->toArray();
+        } else {
+            $district = $this->district == 'semua' ?  'Semua Kecamatan' : collect($this->districts)->firstWhere('id', $this->district)['text'];
+            $village = $this->village === 'semua' ? 'Semua Kelurahan/Desa' : collect($this->villages)->firstWhere('id', $this->village)['text'];
+            $tps = $this->tps === 'semua' ? 'Semua TPS' : collect($this->tpses)->firstWhere('id', $this->tps)['text'];
+            $team = $this->team === 'semua' ? 'Semua Tim Bersinar' : collect($this->team)->map(fn($team) => collect($this->teams)->firstWhere('id', $team)['text'])->toArray();
+        }
 
         do {
             $unique_code = base64_encode(Carbon::now()->timestamp);
@@ -98,7 +110,7 @@ class Form extends Component
                         'created_at' => $created_at
                     ];
                 } else if ($this->jenis_laporan == 'voters') {
-                    $filename = 'Data Pemilih.pdf';
+                    $filename = 'Data Pemilih.xlsx';
 
                     $view = 'printout.voters';
 
@@ -143,9 +155,18 @@ class Form extends Component
                     'status' => 'on_progress'
                 ]);
 
+                switch ($this->jenis_laporan) {
+                    case 'counter':
+                        $district_data = $this->all_districts ? 'semua' : $this->district;
+                        break;
+                    default:
+                        $district_data = $this->district;
+                        break;
+                }
+
                 dispatch(new Report(
                     type: $this->jenis_laporan,
-                    district: $this->district,
+                    district: $district_data,
                     village: $this->village,
                     tps: $this->tps,
                     team: $this->team,
@@ -185,8 +206,12 @@ class Form extends Component
                 return $data;
             })
         ];
-        if ($this->jenis_laporan == 'voters')
-            array_unshift($districts, ['id' => 'semua', 'text' => 'Semua']);
+
+        if ($this->jenis_laporan == 'voters') {
+            // array_unshift($districts, ['id' => 'semua', 'text' => 'Semua']);
+            $this->district = $districts[0]['id'];
+            $this->set_villages();
+        }
 
         $this->districts = $districts;
     }
@@ -195,7 +220,7 @@ class Form extends Component
     {
         $villages = $this->villages_data();
         $this->villages = [
-            ['id' => 'semua', 'text' => 'Semua'],
+            // ['id' => 'semua', 'text' => 'Semua'],
             ...$villages->map(function ($q, $index) {
                 $data = [
                     'id' => $q->id,
@@ -204,7 +229,7 @@ class Form extends Component
                 return $data;
             })
         ];
-        $this->village = 'semua';
+        $this->village = $villages[0]['id'];
         $this->set_tpses();
         $this->set_teams();
     }
@@ -213,7 +238,7 @@ class Form extends Component
     {
         $tpses =  $this->tpses_data();
         $this->tpses = [
-            ['id' => 'semua', 'text' => 'Semua'],
+            // ['id' => 'semua', 'text' => 'Semua'],
             ...$tpses->map(function ($q, $index) {
                 $data = [
                     'id' => $q->id,
@@ -222,7 +247,7 @@ class Form extends Component
                 return $data;
             })
         ];
-        $this->tps = 'semua';
+        $this->tps = $tpses[0]['id'];
         $this->set_teams();
     }
 
@@ -238,7 +263,7 @@ class Form extends Component
                 return $data;
             })
         ];
-        $this->team = 'semua';
+        $this->team = [];
     }
 
     public function villages_data()
@@ -256,29 +281,40 @@ class Form extends Component
 
     public function teams_data()
     {
-        return User::role('Tim Bersinar')
-            ->where('district_id', $this->district)
-            ->where('village_id', $this->village)
-            ->where('tps_id', $this->tps)
-            ->get();
+        if ($this->type == 'tim_bersinar')
+            return User::role('Tim Bersinar')
+                ->where('district_id', $this->district)
+                ->where('village_id', $this->village)
+                ->where('tps_id', $this->tps)
+                ->get();
+
+        if ($this->type == 'tim_keluarga')
+            return User::role('Koordinator Keluarga')
+                ->get();
     }
 
     public function change_report()
     {
         $this->set_districts();
         if ($this->jenis_laporan == 'counter') {
-            $this->district = [];
             $this->all_districts = true;
+            $this->district = [];
+            $this->village = null;
+            $this->tps = null;
+            $this->team = [];
         }
 
         if ($this->jenis_laporan == 'voters') {
-            $this->district = 'semua';
-            $this->village = 'semua';
-            $this->tps = 'semua';
-            $this->all_teams = true;
-            $this->set_villages();
-            $this->set_tpses();
-            $this->set_teams();
+            $this->type = 'tim_bersinar';
+        }
+    }
+
+    public function change_type()
+    {
+        if ($this->type == 'tim_bersinar') {
+            $this->team = [];
+        } else {
+            $this->team = $this->teams[0]['id'];
         }
     }
 }
